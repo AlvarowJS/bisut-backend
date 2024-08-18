@@ -1,0 +1,8 @@
+models:
+  Role:
+    name: string
+    description: string
+    role_number: number    
+
+controllers:
+  # ...

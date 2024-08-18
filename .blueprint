@@ -1,0 +1,7 @@
+created:
+    - database/factories/RoleFactory.php
+    - database/migrations/2024_08_17_160525_create_roles_table.php
+    - app/Models/Role.php
+models:
+    User: {  }
+    Role: { name: string, description: string, role_number: number }
