@@ -1,8 +1,47 @@
 models:
-  Role:
-    name: string
-    description: string
-    role_number: number    
+  # Role:
+  #   name: string
+  #   description: string
+  #   role_number: number    
+
+  Cliente:
+    nombre_completo: string
+    rfc: string
+    direccion: string
+    colonia: string
+    delegacion: string
+    estado: string
+    cp: string
+    telefono: string
+    limite_credito: number
+    mail: string
+    fecha_nac: date
+  
+  Compra:
+    factura: string
+    fecha: date
+    total: number
+    cliente_id: id
+    
+  DetalleCompra:
+    item: string
+    descripcion: string
+    cajas: number
+    precio_unitario: number
+    producto_id: id
+    compra_id: id
+
+  Producto:
+    item: string
+    descripcion: string
+    precio1: number
+    precio2: number
+    precio3: number
+    precioUnitario: number
+    precioLista: number
+    precioSuelto: number
+    precioEspecial: number
+    piezasPaquete: number
 
 controllers:
   # ...

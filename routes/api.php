@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController as Auth;
+use App\Http\Controllers\Api\V1\ClienteController as Cliente;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,5 +23,6 @@ Route::post('/login', [Auth::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/token-auth', [Auth::class, 'authToken']);
-
+    Route::apiResource('/v1/clientes', Cliente::class);
+    Route::apiResource('/users', Auth::class);
 });

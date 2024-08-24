@@ -1,7 +1,8 @@
 created:
-    - database/factories/RoleFactory.php
-    - database/migrations/2024_08_17_160525_create_roles_table.php
-    - app/Models/Role.php
+    - database/factories/ClienteFactory.php
+    - database/migrations/2024_08_19_170333_create_clientes_table.php
+    - app/Models/Cliente.php
 models:
-    User: {  }
-    Role: { name: string, description: string, role_number: number }
+    Role: { name: string, description: string, role_number: string }
+    User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable', user_id: 'biginteger unsigned nullable' }
+    Cliente: { nombre_completo: string, rfc: string, direccion: string, colonia: string, delegacion: string, estado: string, cp: string, telefono: string, limite_credito: number, mail: string }
