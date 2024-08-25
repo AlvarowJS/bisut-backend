@@ -4,32 +4,36 @@ models:
   #   description: string
   #   role_number: number    
 
-  Cliente:
-    nombre_completo: string
-    rfc: string
-    direccion: string
-    colonia: string
-    delegacion: string
-    estado: string
-    cp: string
-    telefono: string
-    limite_credito: number
-    mail: string
-    fecha_nac: date
+  # Cliente:
+  #   nombre_completo: string
+  #   rfc: string
+  #   direccion: string
+  #   colonia: string
+  #   delegacion: string
+  #   estado: string
+  #   cp: string
+  #   telefono: string
+  #   limite_credito: number
+  #   mail: string
+  #   fecha_nac: date
   
+  Proveedor:
+    nombre: string
+    direccion: string
+    telefono: string
+    mail: string
+    codigo_postal: string
+    estado: boolean
+
+  almacen:
+    nombre: string
+    descripcion: string
+
   Compra:
     factura: string
     fecha: date
     total: number
     cliente_id: id
-    
-  DetalleCompra:
-    item: string
-    descripcion: string
-    cajas: number
-    precio_unitario: number
-    producto_id: id
-    compra_id: id
 
   Producto:
     item: string
@@ -43,5 +47,12 @@ models:
     precioEspecial: number
     piezasPaquete: number
 
+  DetalleCompra:
+    item: string
+    descripcion: string
+    cajas: number
+    precio_unitario: number
+    producto_id: id
+    compra_id: id
 controllers:
   # ...
