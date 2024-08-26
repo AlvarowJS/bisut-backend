@@ -34,7 +34,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'alvaro@gmail.com',
             'password' => 'dragonball',
             'role_id' => 1,
-            'phone' => '993340954'
+            'phone' => '993340954',
+            'status' => 1
 
         ]);
     }

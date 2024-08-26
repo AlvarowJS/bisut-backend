@@ -17,42 +17,89 @@ models:
   #   mail: string
   #   fecha_nac: date
   
-  Proveedor:
+  # Proveedor:
+  #   nombre: string
+  #   direccion: string
+  #   telefono: string
+  #   mail: string
+  #   codigo_postal: string
+  #   estado: boolean
+
+  # almacen:
+  #   nombre: string
+  #   descripcion: string
+
+  # Compra:
+  #   factura: string
+  #   fecha: date
+  #   total: number
+  #   cliente_id: id
+
+  # Familia:
+  #   nombre: string
+  #   descripcion: string
+
+  # Grupo:
+  #   nombre: string
+  #   descripcion: string
+
+  # Marca:
+  #   nombre: string
+  #   descripcion: string
+    
+  # Producto:
+  #   item: string
+  #   descripcion: string
+  #   precio1: number
+  #   precio2: number
+  #   precio3: number
+  #   precioUnitario: number
+  #   precioLista: number
+  #   precioSuelto: number
+  #   precioEspecial: number
+  #   piezasPaquete: number
+  #   familia_id: id
+  #   grupo_id: id
+  #   marca_id: id
+
+  # DetalleCompra:
+  #   item: string
+  #   descripcion: string
+  #   cajas: number
+  #   precio_unitario: number
+  #   producto_id: id
+  #   compra_id: id
+
+  # kardex:
+  #   fecha: date
+  #   documento: string
+  #   cantidadEntrada: number
+  #   vuEntrada: number
+  #   vtEntrada: number
+  #   cantidadSalida: number
+  #   vuSalida: number
+  #   vtSalida: number
+  #   CantidadSaldo: number
+  #   vuSaldo: number
+  #   vtSaldo: number
+  #   producto_id: id
+  #   operacion_id: id
+  #   compra_id: id
+  #   venta_id: id
+  #   almacen_id: id
+  
+  Familia:
     nombre: string
-    direccion: string
-    telefono: string
-    mail: string
-    codigo_postal: string
-    estado: boolean
+    descripcion: string
 
-  almacen:
+  Grupo:
     nombre: string
     descripcion: string
 
-  Compra:
-    factura: string
-    fecha: date
-    total: number
-    cliente_id: id
-
-  Producto:
-    item: string
+  Marca:
+    nombre: string
     descripcion: string
-    precio1: number
-    precio2: number
-    precio3: number
-    precioUnitario: number
-    precioLista: number
-    precioSuelto: number
-    precioEspecial: number
-    piezasPaquete: number
 
-  DetalleCompra:
-    item: string
-    descripcion: string
-    cajas: number
-    precio_unitario: number
-    producto_id: id
-    compra_id: id
+
 controllers:
   # ...

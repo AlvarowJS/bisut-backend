@@ -35,12 +35,28 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $name = $user->name;
+            $rol = $user->role;
             $token = $user->createToken('api_token')->plainTextToken;
             return response()->json([
-                'api_token' => $token,
-                'name' => $name,
-                'rol' => $user->role_id
-
+                'accessToken' => $token,
+                'refreshToken' => $token,
+                'rol' => $user->role_id,
+                'userData' => [
+                   'ability' => [
+                        [
+                            'action' => 'manage',
+                            'subject' => 'all'
+                        ]
+                    ],
+                    'aceessToken' => $token,
+                    'avatar' => 'https://admin.alven-inmobiliaria.com.mx/assets/avatar-s-11.b6d7c056.jpg',
+                    'email' => $user->email,
+                    'fullName' => $name,
+                    'id' => $user->id,
+                    'refresh_token' => $token,
+                    'role' => 'admin',
+                    'username' => $name,
+                ]
             ], 200);
         } else {
             return response()->json(['message' => 'Invalid credentials'], 401);
@@ -131,7 +147,6 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         return response()->json($user);
-
     }
 
     /**
