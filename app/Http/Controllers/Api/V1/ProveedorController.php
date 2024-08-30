@@ -20,12 +20,14 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $userCurrent = auth()->id();
-        $data = Proveedor::create();
+        $data = new Proveedor();
         $data ->user_id = $userCurrent;
         $data -> nombre = $request->nombre;
         $data -> telefono = $request->telefono;
         $data -> mail = $request->mail;
         $data -> status = true;
+        $data->save();
+        return response()->json($data);
     }
 
     /**

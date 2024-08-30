@@ -51,6 +51,9 @@ class AuthController extends Controller
                     'aceessToken' => $token,
                     'avatar' => 'https://admin.alven-inmobiliaria.com.mx/assets/avatar-s-11.b6d7c056.jpg',
                     'email' => $user->email,
+                    'extras' => [                        
+                        'eCommerceCartItemsCount' => 5
+                    ],
                     'fullName' => $name,
                     'id' => $user->id,
                     'refresh_token' => $token,

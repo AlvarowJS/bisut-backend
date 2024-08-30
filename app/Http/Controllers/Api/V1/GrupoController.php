@@ -3,47 +3,52 @@
 namespace App\Http\Controllers\api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grupo;
 use Illuminate\Http\Request;
 
 class GrupoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $data = Grupo::all();
+        return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = new Grupo();
+        $data->nombre = $request->nombre;
+        $data->descripcion = $request->descripcion;
+        $data->save();
+        return response()->json($data);
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $data = Grupo::find($id);
+        if (!$data) {
+            return response()->json(["message" => "not found"], 404);
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Grupo::find($id);
+        if (!$data) {
+            return response()->json(["message" => "not found"], 404);
+        }
+        $data->nombre = $request->nombre;
+        $data->descripcion = $request->descripcion;
+        $data->save();
+        return response()->json($data);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $data = Grupo::find($id);
+        if (!$data) {
+            return response()->json(["message" => "not found"], 404);
+        }
+        $data->delete();
+        return response()->json($data);
     }
 }

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('telefono');
             $table->string('mail');
             $table->string('codigo_postal');
-            $table->boolean('estado');
+            $table->boolean('estado');            
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

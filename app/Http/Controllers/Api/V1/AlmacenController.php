@@ -16,7 +16,7 @@ class AlmacenController extends Controller
 
     public function store(Request $request)
     {
-        $data = Almacen::create();
+        $data = new Almacen();
         $data->nombre = $request->nombre;
         $data->descripcion = $request->descripcion;
         $data->save();
@@ -40,6 +40,11 @@ class AlmacenController extends Controller
 
     public function destroy(string $id)
     {
-        
+        $data = Almacen::find($id);
+        if (!$data) {
+            return response()->json(["message" => "not found"], 404);
+        }
+        $data->delete();
+        return response()->json($data);
     }
 }

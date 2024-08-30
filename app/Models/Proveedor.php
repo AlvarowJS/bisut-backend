@@ -21,6 +21,7 @@ class Proveedor extends Model
         'mail',
         'codigo_postal',
         'estado',
+        'user_id'
     ];
 
     /**
