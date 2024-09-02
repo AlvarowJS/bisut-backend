@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\GrupoController as Grupo;
 use App\Http\Controllers\Api\V1\MarcaController as Marca;
 use App\Http\Controllers\Api\V1\AlmacenController as Almacen;
 use App\Http\Controllers\Api\V1\ProveedorController as Proveedor;
+use App\Http\Controllers\Api\V1\ProductoController as Producto;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,5 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('v1/marcas', Marca::class);
     Route::apiResource('v1/almacen', Almacen::class);
     Route::apiResource('v1/proveedor', Proveedor::class);
+    Route::apiResource('v1/productos', Producto::class);
 
 });

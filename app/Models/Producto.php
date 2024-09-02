@@ -25,6 +25,7 @@ class Producto extends Model
         'precioSuelto',
         'precioEspecial',
         'piezasPaquete',
+        'foto'
     ];
 
     /**

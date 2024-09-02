@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('precioSuelto');
             $table->float('precioEspecial');
             $table->integer('piezasPaquete');
+            $table->text('foto');
             $table->foreignId('familia_id')->nullable()->constrained('familias');
             $table->foreignId('grupo_id')->nullable()->constrained('grupos');
             $table->foreignId('marca_id')->nullable()->constrained('marcas');
