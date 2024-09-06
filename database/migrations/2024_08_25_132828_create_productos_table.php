@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string('item');
-            $table->string('descripcion');
-            $table->float('precio1');
-            $table->float('precio2');
-            $table->float('precio3');
-            $table->float('precioUnitario');
-            $table->float('precioLista');
-            $table->float('precioSuelto');
-            $table->float('precioEspecial');
-            $table->integer('piezasPaquete');
-            $table->text('foto');
+            $table->string('item')->nullable();
+            $table->string('descripcion')->nullable();
+            $table->float('precio1')->nullable();
+            $table->float('precio2')->nullable();
+            $table->float('precio3')->nullable();
+            $table->float('precioUnitario')->nullable();
+            $table->float('precioLista')->nullable();
+            $table->float('precioSuelto')->nullable();
+            $table->float('precioEspecial')->nullable();
+            $table->integer('piezasPaquete')->nullable();
+            $table->text('foto')->nullable();
             $table->foreignId('familia_id')->nullable()->constrained('familias');
             $table->foreignId('grupo_id')->nullable()->constrained('grupos');
             $table->foreignId('marca_id')->nullable()->constrained('marcas');

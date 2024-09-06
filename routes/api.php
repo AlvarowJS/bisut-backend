@@ -38,5 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('v1/almacen', Almacen::class);
     Route::apiResource('v1/proveedor', Proveedor::class);
     Route::apiResource('v1/productos', Producto::class);
+    Route::post('v1/producto-foto', [Producto::class, 'updateFoto']);
 
 });

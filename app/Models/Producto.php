@@ -36,4 +36,19 @@ class Producto extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function familia()
+    {
+        return $this->belongsTo(Familia::class);
+    }
+
+    public function grupo()
+    {
+        return $this->belongsTo(Grupo::class);
+    }
+
+    public function marca()
+    {
+        return $this->belongsTo(Marca::class);
+    }
 }
