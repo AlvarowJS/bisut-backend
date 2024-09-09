@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('iva');
             $table->string('flete');
             $table->string('total');
-            $table->foreignId('almacen_id');
-            $table->foreignId('user_id');
-            $table->foreignId('cliente_id');
+            $table->foreignId('almacen_id')->nullable()->constrained('almacens');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('cliente_id')->nullable()->constrained('clientes');
             $table->timestamps();
         });
     }

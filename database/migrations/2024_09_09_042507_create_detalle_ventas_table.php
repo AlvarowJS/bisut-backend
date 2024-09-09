@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('cantidad_venta');
             $table->string('precio_venta');
-            $table->foreignId('producto_id');
+            $table->foreignId('producto_id')->nullable()->constrained('productos');
             $table->timestamps();
         });
     }

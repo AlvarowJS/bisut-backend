@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('factura');
             $table->date('fecha');
             $table->float('total');
-            $table->foreignId('cliente_id');
+            $table->foreignId('cliente_id')->nullable()->constrained('clientes');;
             $table->timestamps();
         });
     }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('descripcion');
             $table->string('cajas');
             $table->float('precio_unitario');
-            $table->foreignId('producto_id');
-            $table->foreignId('compra_id');
+            $table->foreignId('producto_id')->nullable()->constrained('productos');;
+            $table->foreignId('compra_id')->nullable()->constrained('compras');;
             $table->timestamps();
         });
     }

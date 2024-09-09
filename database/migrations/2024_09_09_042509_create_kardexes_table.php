@@ -14,21 +14,21 @@ return new class extends Migration
         Schema::create('kardexes', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->string('documento');
-            $table->string('cantidadEntrada');
-            $table->string('vuEntrada');
-            $table->string('vtEntrada');
-            $table->string('cantidadSalida');
-            $table->string('vuSalida');
-            $table->string('vtSalida');
-            $table->string('CantidadSaldo');
-            $table->string('vuSaldo');
-            $table->string('vtSaldo');
-            $table->foreignId('producto_id');
-            $table->foreignId('operacion_id');
-            $table->foreignId('compra_id');
-            $table->foreignId('venta_id');
-            $table->foreignId('almacen_id');
+            $table->string('documento')->nullable();
+            $table->string('cantidadEntrada')->nullable();
+            $table->string('vuEntrada')->nullable();
+            $table->string('vtEntrada')->nullable();
+            $table->string('cantidadSalida')->nullable();
+            $table->string('vuSalida')->nullable();
+            $table->string('vtSalida')->nullable();
+            $table->string('CantidadSaldo')->nullable();
+            $table->string('vuSaldo')->nullable();
+            $table->string('vtSaldo')->nullable();
+            $table->foreignId('producto_id')->nullable()->constrained('productos');
+            $table->foreignId('operacion_id')->nullable()->constrained('operacions');
+            $table->foreignId('compra_id')->nullable()->constrained('compras');
+            $table->foreignId('venta_id')->nullable()->constrained('ventas');
+            $table->foreignId('almacen_id')->nullable()->constrained('almacens');
             $table->timestamps();
         });
     }

@@ -36,7 +36,23 @@ class DatabaseSeeder extends Seeder
             'role_id' => 1,
             'phone' => '993340954',
             'status' => 1
+        ]);
 
+        \App\Models\Operacion::factory()->create([
+            'nombre' => 'Stock Inicial',
+            'descripcion' => 'Primera vez que se registra',            
+        ]);
+        \App\Models\Operacion::factory()->create([
+            'nombre' => 'Compras',
+            'descripcion' => 'Primera vez que se registra',            
+        ]);
+        \App\Models\Operacion::factory()->create([
+            'nombre' => 'Ventas',
+            'descripcion' => 'Primera vez que se registra',            
+        ]);
+        \App\Models\Operacion::factory()->create([
+            'nombre' => 'Transferencia',
+            'descripcion' => '',            
         ]);
     }
 }   
