@@ -1,13 +1,16 @@
 created:
-    - database/factories/FamiliaFactory.php
-    - database/factories/GrupoFactory.php
-    - database/factories/MarcaFactory.php
-    - database/migrations/2024_08_25_190920_create_familias_table.php
-    - database/migrations/2024_08_25_190921_create_grupos_table.php
-    - database/migrations/2024_08_25_190922_create_marcas_table.php
-    - app/Models/Familia.php
-    - app/Models/Grupo.php
-    - app/Models/Marca.php
+    - database/factories/VentaFactory.php
+    - database/factories/DetalleVentaFactory.php
+    - database/factories/OperacionFactory.php
+    - database/factories/KardexFactory.php
+    - database/migrations/2024_09_09_042506_create_ventas_table.php
+    - database/migrations/2024_09_09_042507_create_detalle_ventas_table.php
+    - database/migrations/2024_09_09_042508_create_operacions_table.php
+    - database/migrations/2024_09_09_042509_create_kardexes_table.php
+    - app/Models/Venta.php
+    - app/Models/DetalleVenta.php
+    - app/Models/Operacion.php
+    - app/Models/Kardex.php
 models:
     Role: { name: string, description: string, role_number: string }
     User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable', user_id: 'biginteger unsigned nullable' }
@@ -20,3 +23,7 @@ models:
     Familia: { nombre: string, descripcion: string }
     Grupo: { nombre: string, descripcion: string }
     Marca: { nombre: string, descripcion: string }
+    Venta: { importe: number, descuento: number, subTotal: number, iva: number, flete: number, total: numner, almacen_id: id, user_id: id, cliente_id: id }
+    DetalleVenta: { cantidad_venta: number, precio_venta: number, producto_id: id }
+    Operacion: { nombre: string, descripcion: string }
+    Kardex: { fecha: date, documento: string, cantidadEntrada: number, vuEntrada: number, vtEntrada: number, cantidadSalida: number, vuSalida: number, vtSalida: number, CantidadSaldo: number, vuSaldo: number, vtSaldo: number, producto_id: id, operacion_id: id, compra_id: id, venta_id: id, almacen_id: id }

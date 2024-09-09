@@ -70,7 +70,27 @@ models:
   #   producto_id: id
   #   compra_id: id
 
-  kardex:
+  Venta:
+    importe: number
+    descuento: number
+    subTotal: number
+    iva: number
+    flete: number
+    total: numner
+    almacen_id: id
+    user_id: id
+    cliente_id: id
+
+  DetalleVenta:
+    cantidad_venta: number
+    precio_venta: number
+    producto_id: id
+  
+  Operacion: 
+    nombre: string
+    descripcion: string
+
+  Kardex:
     fecha: date
     documento: string
     cantidadEntrada: number
@@ -87,6 +107,7 @@ models:
     compra_id: id
     venta_id: id
     almacen_id: id
+
 
 
 controllers:
