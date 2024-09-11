@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Compra;
 use App\Models\DetalleCompra;
 use App\Models\Kardex;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -23,50 +24,86 @@ class CompraController extends Controller
     {
         DB::beginTransaction();
         try {
-            // 1. Registrar la compra
-            $compra = Compra::create([
-                'factura' => $request->factura,
-                'fecha' => $request->fecha,
-                'total' => $request->total,
-                'cliente_id' => $request->cliente_id
-            ]);
+            $tienda = $request->almacen_id;
+            $cliente = $request->cliente_id;
+            $proveedor = $request->proveedor_id;
+            $fecha = $request->fecha;
+            $factura = $request->factura;
 
-            // 2. Registrar los detalles de la compra
+            // Crear la compra
+            $compra = new Compra();
+            $compra->factura = $factura;
+            $compra->fecha = $fecha;
+            $compra->total = $request->total;
+            $compra->cliente_id = $cliente;
+            $compra->almacen_id = $tienda;
+            $compra->proveedor_id = $proveedor;
+            $compra->save();
+
+            // Iterar sobre los detalles de la compra
             foreach ($request->detalles as $detalle) {
-                $detalleCompra = DetalleCompra::create([
-                    'item' => $detalle['item'],
-                    'descripcion' => $detalle['descripcion'],
-                    'cajas' => $detalle['cajas'],
-                    'precio_unitario' => $detalle['precio_unitario'],
-                    'producto_id' => $detalle['producto_id'],
-                    'compra_id' => $compra->id
-                ]);
+                $producto = Producto::where('item', $detalle['item'])->first();
 
-                // 3. Registrar en Kardex (Entrada)
-                $kardexEntrada = Kardex::create([
-                    'fecha' => $request->fecha,
-                    'documento' => $request->factura,
-                    'cantidadEntrada' => $detalle['cajas'],
-                    'vuEntrada' => $detalle['precio_unitario'],
-                    'vtEntrada' => $detalle['cajas'] * $detalle['precio_unitario'],
-                    'cantidadSalida' => 0, // No es una venta, entonces no hay salida
-                    'vuSalida' => 0,
-                    'vtSalida' => 0,
-                    'cantidadSaldo' => $detalle['cajas'], // Ajustar el saldo según el stock
-                    'vuSaldo' => $detalle['precio_unitario'],
-                    'vtSaldo' => $detalle['cajas'] * $detalle['precio_unitario'],
-                    'producto_id' => $detalle['producto_id'],
-                    'operacion_id' => 1, // Suponiendo que 1 es para compra
-                    'compra_id' => $compra->id,
-                    'almacen_id' => $request->almacen_id
-                ]);
+                // Crear el detalle de la compra
+                $detalleCompra = new DetalleCompra();
+                $detalleCompra->item = $producto->item;
+                $detalleCompra->descripcion = $producto->descripcion;
+                $detalleCompra->cantidad = $detalle['cantidad'];
+                $detalleCompra->precio_unitario = $detalle['precio_unitario'];
+                $detalleCompra->producto_id = $producto->id;
+                $detalleCompra->compra_id = $compra->id;
+                $detalleCompra->save();
+
+                // Buscar la última operación en el Kardex
+                $operacion = Kardex::where('producto_id', $producto->id)
+                    ->where('almacen_id', $tienda)
+                    ->latest('id')
+                    ->first();
+
+                // Definir tipo de operación: 1 = compra anterior, 2 = stock inicial
+                $operacionTipo = $operacion ? 1 : 2;
+
+                // Calcular el saldo dependiendo de la operación
+                if ($operacionTipo == 1) {
+                    $cantidadSaldo = $detalle['cantidad'];
+                    $vuSaldo = $detalle['precio_unitario'];
+                    $vtSaldo = $detalle['cantidad'] * $detalle['precio_unitario'];
+                } else {
+                    $cantidadSaldo = $operacion->cantidadSaldo + $detalle['cantidad'];
+                    $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precio_unitario']);
+                    $vuSaldo = $vtSaldo / $cantidadSaldo;
+                }
+
+                // Crear el registro en el Kardex
+                $kardex = new Kardex();
+                $kardex->fecha = $fecha;
+                $kardex->documento = $factura;
+                $kardex->cantidadEntrada = $detalle['cantidad'];
+                $kardex->vuEntrada = $detalle['precio_unitario'];
+                $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precio_unitario'];
+                $kardex->cantidadSalida = 0;
+                $kardex->vuSalida = 0;
+                $kardex->vtSalida = 0;
+                $kardex->cantidadSaldo = $cantidadSaldo;
+                $kardex->vuSaldo = $vuSaldo;
+                $kardex->vtSaldo = $vtSaldo;
+                $kardex->producto_id = $producto->id;
+                $kardex->operacion_id = $operacionTipo;
+                $kardex->compra_id = $compra->id;
+                $kardex->almacen_id = $tienda;
+                $kardex->save();
             }
+
+            // Si todo va bien, confirmar la transacción
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Compra y ventas registradas correctamente.']);
         } catch (\Exception $e) {
+            // Si ocurre algún error, revertir la transacción
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => 'Error al registrar la compra/venta.', 'error' => $e->getMessage()]);
+            // Manejar el error, por ejemplo, lanzar una excepción o devolver una respuesta de error
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+
+        return response()->json(['message' => 'Compra registrada con éxito'], 200);
     }
     public function show(string $id)
     {
