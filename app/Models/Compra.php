@@ -30,7 +30,6 @@ class Compra extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'fecha' => 'date',
         'cliente_id' => 'integer',
     ];
 

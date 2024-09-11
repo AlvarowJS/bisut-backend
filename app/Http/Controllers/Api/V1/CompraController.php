@@ -111,7 +111,9 @@ class CompraController extends Controller
     }
     public function show(string $id)
     {
-        $datos = Compra::find($id);
+        // $datos = Compra::find($id);
+        $datos = Compra::with(['cliente', 'detallesCompra'])->find($id);
+
 
         if (!$datos) {
             return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
