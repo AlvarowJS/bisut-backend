@@ -44,15 +44,15 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Compras',
-            'descripcion' => 'Primera vez que se registra',            
+            'descripcion' => 'Cuando ya se registro varias veces',            
         ]);
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Ventas',
-            'descripcion' => 'Primera vez que se registra',            
+            'descripcion' => 'Cuando ya se vendio varias veces',
         ]);
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Transferencia',
-            'descripcion' => '',            
+            'descripcion' => 'Cuando se transfiere de una tienda a otra',
         ]);
     }
 }   

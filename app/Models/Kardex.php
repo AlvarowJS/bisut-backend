@@ -24,7 +24,7 @@ class Kardex extends Model
         'cantidadSalida',
         'vuSalida',
         'vtSalida',
-        'CantidadSaldo',
+        'cantidadSaldo',
         'vuSaldo',
         'vtSaldo',
         'producto_id',
@@ -41,7 +41,6 @@ class Kardex extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'fecha' => 'date',
         'producto_id' => 'integer',
         'operacion_id' => 'integer',
         'compra_id' => 'integer',

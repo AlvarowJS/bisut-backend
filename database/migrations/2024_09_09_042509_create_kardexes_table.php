@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cantidadSalida')->nullable();
             $table->string('vuSalida')->nullable();
             $table->string('vtSalida')->nullable();
-            $table->string('CantidadSaldo')->nullable();
+            $table->string('cantidadSaldo')->nullable();
             $table->string('vuSaldo')->nullable();
             $table->string('vtSaldo')->nullable();
             $table->foreignId('producto_id')->nullable()->constrained('productos');

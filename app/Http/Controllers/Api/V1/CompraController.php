@@ -34,13 +34,14 @@ class CompraController extends Controller
             $compra = new Compra();
             $compra->factura = $factura;
             $compra->fecha = $fecha;
-            $compra->total = $request->total;
+            $compra->total = 0;
             $compra->cliente_id = $cliente;
             $compra->almacen_id = $tienda;
             $compra->proveedor_id = $proveedor;
             $compra->save();
 
             // Iterar sobre los detalles de la compra
+            $totalCompra = 0;
             foreach ($request->detalles as $detalle) {
                 $producto = Producto::where('item', $detalle['item'])->first();
 
@@ -54,14 +55,16 @@ class CompraController extends Controller
                 $detalleCompra->compra_id = $compra->id;
                 $detalleCompra->save();
 
+                $totalCompra += $detalle['cantidad'] * $detalleCompra['precio_unitario'];
                 // Buscar la última operación en el Kardex
                 $operacion = Kardex::where('producto_id', $producto->id)
                     ->where('almacen_id', $tienda)
                     ->latest('id')
                     ->first();
 
-                // Definir tipo de operación: 1 = compra anterior, 2 = stock inicial
-                $operacionTipo = $operacion ? 1 : 2;
+
+                // Definir tipo de operación: 2 = compra anterior, 1 = stock inicial
+                $operacionTipo = $operacion ? 2 : 1;
 
                 // Calcular el saldo dependiendo de la operación
                 if ($operacionTipo == 1) {
@@ -93,7 +96,8 @@ class CompraController extends Controller
                 $kardex->almacen_id = $tienda;
                 $kardex->save();
             }
-
+            $compra->total = $totalCompra;
+            $compra->save();
             // Si todo va bien, confirmar la transacción
             DB::commit();
         } catch (\Exception $e) {

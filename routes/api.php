@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\AlmacenController as Almacen;
 use App\Http\Controllers\Api\V1\ProveedorController as Proveedor;
 use App\Http\Controllers\Api\V1\ProductoController as Producto;
 use App\Http\Controllers\Api\V1\CompraController as Compra;
+use App\Http\Controllers\Api\V1\KardexController as Kardex;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('v1/proveedor', Proveedor::class);
     Route::apiResource('v1/productos', Producto::class);
     Route::apiResource('v1/compras', Compra::class);
+    Route::apiResource('v1/kardex', Kardex::class);
     Route::post('v1/producto-foto', [Producto::class, 'updateFoto']);
 
 });
