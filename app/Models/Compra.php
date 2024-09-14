@@ -20,7 +20,8 @@ class Compra extends Model
         'factura',
         'fecha',
         'total',
-        'cliente_id',
+        'almacen_id',
+        'proveedor_id'
     ];
 
     /**
@@ -30,7 +31,6 @@ class Compra extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'cliente_id' => 'integer',
     ];
 
     public function cliente(): BelongsTo

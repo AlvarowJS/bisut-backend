@@ -21,7 +21,8 @@ class DetalleCompra extends Model
         'cantidad',
         'precio_unitario',
         'producto_id',
-        'compra_id',
+        'total',
+        'compra_id',        
     ];
 
     /**

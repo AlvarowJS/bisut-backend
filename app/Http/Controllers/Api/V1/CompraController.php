@@ -10,10 +10,45 @@ use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Imports\ComprasImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CompraController extends Controller
 {
+    public function importarCompras(Request $request)
+    {
+        // Validar que el archivo y los otros campos estén presentes
+        $request->validate([
+            'factura' => 'required|string',
+            'fecha' => 'required|date',
+            'proveedor' => 'required|integer',
+            'archivo' => 'required|file|mimes:xlsx,xls', // Solo permitir archivos Excel
+        ]);
 
+        // Obtener los datos adicionales
+        $factura = $request->factura;
+        $fecha = $request->fecha;
+        $proveedor = $request->proveedor;
+        $almacen = $request->almacen;
+
+        // Subir y procesar el archivo Excel
+        $file = $request->file('archivo');
+
+        try {
+            // Pasar los datos adicionales al importador
+            Excel::import(new ComprasImport($factura, $fecha, $proveedor, $almacen), $file);
+
+            // Responder con éxito en formato JSON
+            return response()->json([
+                'message' => 'Compras importadas correctamente'
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejar errores y devolver una respuesta con fallo
+            return response()->json([
+                'message' => 'Error al importar compras: ' . $e->getMessage()
+            ], 500);
+        }
+    }
     public function index()
     {
         $data = Compra::with('detallesCompra')->get();
@@ -24,8 +59,7 @@ class CompraController extends Controller
     {
         DB::beginTransaction();
         try {
-            $tienda = $request->almacen_id;
-            $cliente = $request->cliente_id;
+            $tienda = $request->almacen_id;            
             $proveedor = $request->proveedor_id;
             $fecha = $request->fecha;
             $factura = $request->factura;
@@ -34,8 +68,7 @@ class CompraController extends Controller
             $compra = new Compra();
             $compra->factura = $factura;
             $compra->fecha = $fecha;
-            $compra->total = 0;
-            $compra->cliente_id = $cliente;
+            $compra->total = 0;            
             $compra->almacen_id = $tienda;
             $compra->proveedor_id = $proveedor;
             $compra->save();
