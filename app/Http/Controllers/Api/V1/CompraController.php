@@ -33,7 +33,7 @@ class CompraController extends Controller
 
         // Subir y procesar el archivo Excel
         $file = $request->file('archivo');
-
+        
         try {
             // Pasar los datos adicionales al importador
             Excel::import(new ComprasImport($factura, $fecha, $proveedor, $almacen), $file);

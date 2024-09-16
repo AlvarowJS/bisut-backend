@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Compra;
 use App\Models\DetalleCompra;
+use App\Models\Kardex;
 use App\Models\Producto;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -30,12 +31,20 @@ class ComprasImport implements ToCollection
     public function collection(Collection $rows)
     {
         $rows = $rows->slice(1);
-        $compra = Compra::create([
-            'factura' => $this->factura,
-            'fecha' => $this->fecha,
-            'proveedor_id' => $this->proveedor,
-            'almacen_id' => $this->almacen,
-        ]);
+        // $compra = Compra::create([
+        //     'factura' => $this->factura,
+        //     'fecha' => $this->fecha,
+        //     'proveedor_id' => $this->proveedor,
+        //     'almacen_id' => $this->almacen,
+        // ]);
+
+        $compra = new Compra();
+        $compra->factura = $this->factura;
+        $compra->fecha = $this->fecha;
+        $compra->proveedor_id = $this->proveedor;
+        $compra->almacen_id = $this->almacen;
+
+        $totalCompra = 0;
         foreach ($rows as $row) {
             // Obtener datos del Excel
             $item = $row[0];
@@ -104,12 +113,55 @@ class ComprasImport implements ToCollection
                 ]);
             }
             DetalleCompra::create([
-                'compra_id' => $compra->id,
-                'producto_id' => $producto->id,
+                'item' => $item,
+                'descripcion' => $descripcion,
                 'cantidad' => $cantidad,
                 'precio_unitario' => $precioUnitario,
                 'total' => $cantidad * $precioUnitario,
+                'compra_id' => $compra->id,
+                'producto_id' => $producto->id,
             ]);
+
+            // // Registro de kardex
+            // // Buscar la última operación en el Kardex
+            // $operacion = Kardex::where('producto_id', $producto->id)
+            //     ->where('almacen_id', $this->almacen)
+            //     ->latest('id')
+            //     ->first();
+
+
+            // // Definir tipo de operación: 2 = compra anterior, 1 = stock inicial
+            // $operacionTipo = $operacion ? 2 : 1;
+
+            // // Calcular el saldo dependiendo de la operación
+            // if ($operacionTipo == 1) {
+            //     $cantidadSaldo = $cantidad;
+            //     $vuSaldo = $precioUnitario;
+            //     $vtSaldo = $cantidad * $precioUnitario;
+            // } else {
+            //     $cantidadSaldo = $operacion->cantidadSaldo + $detalle['cantidad'];
+            //     $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precio_unitario']);
+            //     $vuSaldo = $vtSaldo / $cantidadSaldo;
+            // }
+
+            // $kardex = new Kardex();
+            // $kardex->fecha = $this->fecha;
+            // $kardex->documento = $this->factura;
+            // $kardex->cantidadEntrada = $cantidad;
+            // $kardex->vuEntrada = $precioUnitario;
+            // $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precio_unitario'];
+            // $kardex->cantidadSalida = 0;
+            // $kardex->vuSalida = 0;
+            // $kardex->vtSalida = 0;
+            // $kardex->cantidadSaldo = $cantidadSaldo;
+            // $kardex->vuSaldo = $vuSaldo;
+            // $kardex->vtSaldo = $vtSaldo;
+            // $kardex->producto_id = $producto->id;
+            // $kardex->operacion_id = $operacionTipo;
+            // $kardex->compra_id = $compra->id;
+            // $kardex->almacen_id = $tienda;
         }
+        $compra->total = $totalCompra;
+        $compra->save();
     }
 }
