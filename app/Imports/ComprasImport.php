@@ -50,8 +50,11 @@ class ComprasImport implements ToCollection
 
         $totalCompra = 0;
         foreach ($rows as $row) {
-            // Obtener datos del Excel
             $item = $row[0];
+            // if (is_null($item) || trim($item) === '') {
+            //     break;
+            // }
+            // Obtener datos del Excel
             $descripcion = $row[1];
             $cajas = $row[2];
             $cantidadxCaja = $row[3];
@@ -61,14 +64,14 @@ class ComprasImport implements ToCollection
             $grupo = $row[7];
             $marca = $row[8];
             $unidad = $row[9];
-            $precioLista = $row[10];
-            $precio1 = $row[11];
-            $precio2 = $row[12];
-            $precio3 = $row[13];
-            $precioEspecial = $row[14];
-            $precioSuelto = $row[15];
-            $piezasxpaquete = $row[16];
-            $fiscal = $row[17];
+            $precioLista = isset($row[10]) ? $row[10] : null;
+            $precio1 = isset($row[11]) ? $row[11] : null;
+            $precio2 = isset($row[12]) ? $row[12] : null;
+            $precio3 = isset($row[13]) ? $row[13] : null;
+            $precioEspecial = isset($row[14]) ? $row[14] : null;
+            $precioSuelto = isset($row[15]) ? $row[15] : null;
+            $piezasxpaquete = isset($row[16]) ? $row[16] : null;
+            $fiscal = isset($row[17]) ? $row[17] : null;
 
             // Buscar si el producto ya existe por 'item'
             $producto = Producto::where('item', $item)->first();
