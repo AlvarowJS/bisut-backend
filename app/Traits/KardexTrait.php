@@ -48,7 +48,7 @@ trait KardexTrait
         $kardex->almacen_id = $tiendaId;
         $kardex->save();
 
-        return null;
+        return $kardex;
     }
 
     public function registrarTransferenciaAlmacen() {}

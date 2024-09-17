@@ -45,8 +45,10 @@ class ComprasImport implements ToCollection
         $compra->fecha = $this->fecha;
         $compra->proveedor_id = $this->proveedor;
         $compra->almacen_id = $this->almacen;
-        $totalCompra = 0;
+        $compra->total = 0;
         $compra->save();
+
+        $totalCompra = 0;
         foreach ($rows as $row) {
             // Obtener datos del Excel
             $item = $row[0];
@@ -70,7 +72,6 @@ class ComprasImport implements ToCollection
 
             // Buscar si el producto ya existe por 'item'
             $producto = Producto::where('item', $item)->first();
-
             if ($producto) {
                 // Actualizar los precios y datos del producto existente
                 $producto->update([
@@ -94,77 +95,72 @@ class ComprasImport implements ToCollection
                 ]);
             } else {
                 // Crear un nuevo producto si no existe
-                Producto::create([
-                    'item' => $item,
-                    'descripcion' => $descripcion,
-                    'cajas' => $cajas,
-                    'cantidad' => $cantidad,
-                    'precioUnitario' => $precioUnitario,
-                    'familia' => $familia,
-                    'grupo' => $grupo,
-                    'marca' => $marca,
-                    'unidad' => $unidad,
-                    'precioLista' => $precioLista,
-                    'precio1' => $precio1,
-                    'precio2' => $precio2,
-                    'precio3' => $precio3,
-                    'precioEspecial' => $precioEspecial,
-                    'precioSuelto' => $precioSuelto,
-                    'piezasPaquete' => $piezasxpaquete,
-                    'fiscal' => $fiscal,
-                ]);
+                // Producto::create([
+                //     'item' => $item,
+                //     'descripcion' => $descripcion,
+                //     'cajas' => $cajas,
+                //     'cantidad' => $cantidad,
+                //     'precioUnitario' => $precioUnitario,
+                //     'familia_id' => $familia,
+                //     'grupo_id' => $grupo,
+                //     'marca_id' => $marca,
+                //     'unidad' => $unidad,
+                //     'precioLista' => $precioLista,
+                //     'precio1' => $precio1,
+                //     'precio2' => $precio2,
+                //     'precio3' => $precio3,
+                //     'precioEspecial' => $precioEspecial,
+                //     'precioSuelto' => $precioSuelto,
+                //     'piezasPaquete' => $piezasxpaquete,
+                //     'fiscal' => $fiscal,
+                // ]);
+
+                $producto = new Producto();
+                $producto->item = $item;
+                $producto->descripcion = $descripcion;
+                $producto->cajas = $cajas;
+                $producto->cantidad = $cantidad;
+                $producto->precioUnitario = $precioUnitario;
+                $producto->familia_id = $familia;
+                $producto->grupo_id = $grupo;
+                $producto->marca_id = $marca;
+                $producto->unidad = $unidad;
+                $producto->precioLista = $precioLista;
+                $producto->precio1 = $precio1;
+                $producto->precio2 = $precio2;
+                $producto->precio3 = $precio3;
+                $producto->precioEspecial = $precioEspecial;
+                $producto->precioSuelto = $precioSuelto;
+                $producto->piezasPaquete = $piezasxpaquete;
+                $producto->fiscal = $fiscal;
+                $producto->save();
             }
-            DetalleCompra::create([
-                'item' => $item,
-                'descripcion' => $descripcion,
-                'cantidad' => $cantidad,
-                'precio_unitario' => $precioUnitario,
-                'total' => $cantidad * $precioUnitario,
-                'compra_id' => $compra->id,
-                'producto_id' => $producto->id,
-            ]);
+
+            // DetalleCompra::create([
+            //     'item' => $item,
+            //     'descripcion' => $descripcion,
+            //     'cantidad' => $cantidad,
+            //     'precio_unitario' => $precioUnitario,
+            //     'total' => $cantidad * $precioUnitario,
+            //     'compra_id' => $compra->id,
+            //     'producto_id' => $producto->id,
+            // ]);
+
+            $detalleCompra = new DetalleCompra();
+            $detalleCompra->item = $item;
+            $detalleCompra->descripcion = $descripcion;
+            $detalleCompra->cantidad = $cantidad;
+            $detalleCompra->precio_unitario = $precioUnitario;
+            $detalleCompra->total = $cantidad * $precioUnitario;
+            $detalleCompra->compra_id = $compra->id;
+            $detalleCompra->producto_id = $producto->id;
+            $detalleCompra->save();
+
+            $totalCompra += $detalleCompra->total;
 
             // // Registro de kardex
 
-            $kardex = $this->registrarCompra($producto->id,$this->almacen, $compra->id, $this->fecha, $this->factura, $cantidad, $precioUnitario);
-
-            // // Buscar la última operación en el Kardex
-            // $operacion = Kardex::where('producto_id', $producto->id)
-            //     ->where('almacen_id', $this->almacen)
-            //     ->latest('id')
-            //     ->first();
-
-
-            // // Definir tipo de operación: 2 = compra anterior, 1 = stock inicial
-            // $operacionTipo = $operacion ? 2 : 1;
-
-            // // Calcular el saldo dependiendo de la operación
-            // if ($operacionTipo == 1) {
-            //     $cantidadSaldo = $cantidad;
-            //     $vuSaldo = $precioUnitario;
-            //     $vtSaldo = $cantidad * $precioUnitario;
-            // } else {
-            //     $cantidadSaldo = $operacion->cantidadSaldo + $detalle['cantidad'];
-            //     $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precio_unitario']);
-            //     $vuSaldo = $vtSaldo / $cantidadSaldo;
-            // }
-
-            // $kardex = new Kardex();
-            // $kardex->fecha = $this->fecha;
-            // $kardex->documento = $this->factura;
-            // $kardex->cantidadEntrada = $cantidad;
-            // $kardex->vuEntrada = $precioUnitario;
-            // $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precio_unitario'];
-            // $kardex->cantidadSalida = 0;
-            // $kardex->vuSalida = 0;
-            // $kardex->vtSalida = 0;
-            // $kardex->cantidadSaldo = $cantidadSaldo;
-            // $kardex->vuSaldo = $vuSaldo;
-            // $kardex->vtSaldo = $vtSaldo;
-            // $kardex->producto_id = $producto->id;
-            // $kardex->operacion_id = $operacionTipo;
-            // $kardex->compra_id = $compra->id;
-            // $kardex->almacen_id = $tienda;
+            $this->registrarCompra($producto->id, $this->almacen, $compra->id, $this->fecha, $this->factura, $cantidad, $precioUnitario);
         }
         $compra->total = $totalCompra;
         $compra->save();

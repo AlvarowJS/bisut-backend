@@ -23,6 +23,9 @@ return new class extends Migration
             $table->float('precioSuelto')->nullable();
             $table->float('precioEspecial')->nullable();
             $table->float('piezasPaquete')->nullable();
+            $table->string('fiscal')->nullable();
+            $table->integer('cajas')->nullable();
+            $table->integer('cantidad')->nullable();
             $table->string('unidad')->nullable();
             $table->text('foto')->nullable();
             $table->foreignId('familia_id')->nullable()->constrained('familias');

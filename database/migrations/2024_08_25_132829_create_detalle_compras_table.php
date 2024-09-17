@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('item');
             $table->string('descripcion');
-            $table->string('cantidad')->nullable();
+            $table->integer('cantidad')->nullable();
+            $table->string('cajas')->nullable();
+            $table->string('unidad')->nullable();
             $table->float('precio_unitario')->nullable();
             $table->float('total')->nullable();
             $table->foreignId('producto_id')->nullable()->constrained('productos');
