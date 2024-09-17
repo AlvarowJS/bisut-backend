@@ -6,11 +6,13 @@ use App\Models\Compra;
 use App\Models\DetalleCompra;
 use App\Models\Kardex;
 use App\Models\Producto;
+use App\Traits\KardexTrait;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
 class ComprasImport implements ToCollection
 {
+    use KardexTrait;
     protected $factura;
     protected $fecha;
     protected $proveedor;
@@ -43,8 +45,8 @@ class ComprasImport implements ToCollection
         $compra->fecha = $this->fecha;
         $compra->proveedor_id = $this->proveedor;
         $compra->almacen_id = $this->almacen;
-
         $totalCompra = 0;
+        $compra->save();
         foreach ($rows as $row) {
             // Obtener datos del Excel
             $item = $row[0];
@@ -123,6 +125,9 @@ class ComprasImport implements ToCollection
             ]);
 
             // // Registro de kardex
+
+            $kardex = $this->registrarCompra($producto->id,$this->almacen, $compra->id, $this->fecha, $this->factura, $cantidad, $precioUnitario);
+
             // // Buscar la última operación en el Kardex
             // $operacion = Kardex::where('producto_id', $producto->id)
             //     ->where('almacen_id', $this->almacen)
