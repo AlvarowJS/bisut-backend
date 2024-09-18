@@ -42,4 +42,9 @@ class Compra extends Model
     {
         return $this->hasMany(DetalleCompra::class);
     }
+
+    public function proveedor(): HasMany
+    {
+        return $this->hasMany(Proveedor::class);
+    }
 }

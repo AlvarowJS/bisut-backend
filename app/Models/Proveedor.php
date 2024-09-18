@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Proveedor extends Model
 {
@@ -33,4 +34,9 @@ class Proveedor extends Model
         'id' => 'integer',
         'estado' => 'boolean',
     ];
+
+    public function compra(): BelongsTo
+    {
+        return $this->belongsTo(Compra::class);
+    }
 }
