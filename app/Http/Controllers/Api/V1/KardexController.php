@@ -16,14 +16,18 @@ class KardexController extends Controller
         $fechaFin =  request()->input('fechaFin');
         $tienda = request()->input('tienda');
 
-        // $producto = Producto::where('item', $producto)->first();
-
-        $data = Kardex::with('producto','almacen','compra','venta','operacion')
-                ->where('producto_id', $producto)
-                ->where('almacen_id', $tienda)
-                ->whereBetween('fecha', [$fechaInicio, $fechaFin])
-                ->orderBy('fecha', 'asc')
-                ->get();
+        $data = Kardex::with('producto', 'almacen', 'compra', 'venta', 'operacion')
+            ->when($producto, function ($query) use ($producto) {
+                return $query->where('producto_id', $producto);
+            })
+            ->when($tienda, function ($query) use ($tienda) {
+                return $query->where('almacen_id', $tienda);
+            })
+            ->when($fechaInicio && $fechaFin, function ($query) use ($fechaInicio, $fechaFin) {
+                return $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+            })
+            ->orderBy('fecha', 'asc')
+            ->get();
 
         return response()->json($data);
     }
