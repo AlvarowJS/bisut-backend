@@ -51,7 +51,7 @@ class CompraController extends Controller
     }
     public function index()
     {
-        $data = Compra::with('detallesCompra', 'proveedor','almacen')->get();
+        $data = Compra::with('proveedor','almacen')->get();
         return response()->json($data);
     }
 
@@ -145,7 +145,7 @@ class CompraController extends Controller
     public function show(string $id)
     {
         // $datos = Compra::find($id);
-        $datos = Compra::with(['cliente', 'detallesCompra'])->find($id);
+        $datos = Compra::with(['almacen','proveedor','detallesCompra'])->find($id);
 
 
         if (!$datos) {
