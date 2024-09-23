@@ -109,7 +109,7 @@ class AuthController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'role_id' => $request->role_id,
-            'status' => true
+            'status' => $request->status,
         ]);
 
         return response()->json([
