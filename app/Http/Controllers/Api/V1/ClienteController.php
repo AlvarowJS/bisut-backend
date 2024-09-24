@@ -39,6 +39,12 @@ class ClienteController extends Controller
         $data->limite_credito = $request->limite_credito;
         $data->mail = $request->mail;
         $data->fecha_nac = $request->fecha_nac;
+        $data->dias_credito = $request->dias_credito;
+        $data->contacto_nombre = $request->contacto_nombre;
+        $data->contacto_telefono = $request->contacto_telefono;
+        $data->contacto_email = $request->contacto_email;
+        $data->tipo = $request->tipo;
+
         $data->save();
         return response()->json($data);
     }
@@ -71,6 +77,11 @@ class ClienteController extends Controller
         $data->limite_credito = $request->limite_credito;
         $data->mail = $request->mail;
         $data->fecha_nac = $request->fecha_nac;
+        $data->dias_credito = $request->dias_credito;
+        $data->contacto_nombre = $request->contacto_nombre;
+        $data->contacto_telefono = $request->contacto_telefono;
+        $data->contacto_email = $request->contacto_email;
+        $data->tipo = $request->tipo;
         $data->save();
         return response()->json([
             'message'=> 'Registro creado',

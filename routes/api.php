@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/token-auth', [Auth::class, 'authToken']);
     Route::apiResource('/v1/clientes', Cliente::class);
     Route::apiResource('/users', Auth::class);
+    Route::get('/roles', [Auth::class, 'mostrarRoles']);
     Route::apiResource('v1/familias', Familia::class);
     Route::apiResource('v1/grupos', Grupo::class);
     Route::apiResource('v1/marcas', Marca::class);

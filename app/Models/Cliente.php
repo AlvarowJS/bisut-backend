@@ -24,8 +24,13 @@ class Cliente extends Model
         'cp',
         'telefono',
         'limite_credito',
+        'dias_credito',
         'mail',
-        'fecha_nac'
+        'fecha_nac',
+        'contacto_nombre',
+        'contacto_telefono',
+        'contacto_email',
+
     ];
 
     /**

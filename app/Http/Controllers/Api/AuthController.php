@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,6 +12,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function mostrarRoles(Request $request)
+    {
+        $data = Role::all();
+        return response()->json($data);
+    }
     public function authToken(Request $request)
     {
         $token = $request->header('Authorization');
@@ -84,7 +90,8 @@ class AuthController extends Controller
 
     public function index()
     {
-        $usuarios = User::all();
+        // $usuarios = User::all();
+        $usuarios = User::with('role')->get();
         if ($usuarios->isEmpty()) {
             return response()->json(['message' => 'No se encontraron medicos'], Response::HTTP_NOT_FOUND);
         }
@@ -110,6 +117,7 @@ class AuthController extends Controller
             'password' => Hash::make($validatedData['password']),
             'role_id' => $request->role_id,
             'status' => $request->status,
+            'almacen_id' => $request->almacen_id,
         ]);
 
         return response()->json([
@@ -146,6 +154,7 @@ class AuthController extends Controller
         $user->phone = $request->phone;
         $user->email = $request->email;
         $user->role_id = $request->role_id;
+        $user->almacen_id = $request->almacen_id;
         $user->status = $request->status;
         $user->password = Hash::make($request->password);
         $user->save();

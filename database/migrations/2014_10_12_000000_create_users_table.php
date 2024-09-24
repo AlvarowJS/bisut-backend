@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('status');
             $table->rememberToken();
             $table->foreignId('role_id')->nullable()->constrained('roles');
+            $table->foreignId('almacen_id')->nullable()->constrained('almacens');
             $table->timestamps();
         });
     }
