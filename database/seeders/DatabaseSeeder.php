@@ -48,6 +48,18 @@ class DatabaseSeeder extends Seeder
             'status' => 1
         ]);
 
+
+        \App\Models\TipoCliente::factory()->create([
+            'nombre' => 'Mayorista',
+        ]);
+        \App\Models\TipoCliente::factory()->create([
+            'nombre' => 'Venta Público',
+        ]);
+        \App\Models\TipoCliente::factory()->create([
+            'nombre' => 'Ventas x Internet',
+        ]);
+
+        
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Stock Inicial',
             'descripcion' => 'Primera vez que se registra',            

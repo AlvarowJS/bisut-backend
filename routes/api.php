@@ -33,6 +33,7 @@ Route::post('/login', [Auth::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/token-auth', [Auth::class, 'authToken']);
     Route::apiResource('/v1/clientes', Cliente::class);
+    Route::get('/v1/clientes-tipos', [Cliente::class, 'indexTipos']);
     Route::apiResource('/users', Auth::class);
     Route::get('/roles', [Auth::class, 'mostrarRoles']);
     Route::apiResource('v1/familias', Familia::class);

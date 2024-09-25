@@ -70,43 +70,47 @@ models:
   #   producto_id: id
   #   compra_id: id
 
-  Venta:
-    importe: number
-    descuento: number
-    subTotal: number
-    iva: number
-    flete: number
-    total: numner
-    almacen_id: id
-    user_id: id
-    cliente_id: id
+  # Venta:
+  #   importe: number
+  #   descuento: number
+  #   subTotal: number
+  #   iva: number
+  #   flete: number
+  #   total: numner
+  #   almacen_id: id
+  #   user_id: id
+  #   cliente_id: id
 
-  DetalleVenta:
-    cantidad_venta: number
-    precio_venta: number
-    producto_id: id
+  # DetalleVenta:
+  #   cantidad_venta: number
+  #   precio_venta: number
+  #   producto_id: id
   
-  Operacion: 
-    nombre: string
-    descripcion: string
+  # Operacion: 
+  #   nombre: string
+  #   descripcion: string
 
-  Kardex:
-    fecha: date
-    documento: string
-    cantidadEntrada: number
-    vuEntrada: number
-    vtEntrada: number
-    cantidadSalida: number
-    vuSalida: number
-    vtSalida: number
-    CantidadSaldo: number
-    vuSaldo: number
-    vtSaldo: number
-    producto_id: id
-    operacion_id: id
-    compra_id: id
-    venta_id: id
-    almacen_id: id
+  # Kardex:
+  #   fecha: date
+  #   documento: string
+  #   cantidadEntrada: number
+  #   vuEntrada: number
+  #   vtEntrada: number
+  #   cantidadSalida: number
+  #   vuSalida: number
+  #   vtSalida: number
+  #   CantidadSaldo: number
+  #   vuSaldo: number
+  #   vtSaldo: number
+  #   producto_id: id
+  #   operacion_id: id
+  #   compra_id: id
+  #   venta_id: id
+  #   almacen_id: id
+
+  TipoCliente:
+    nombre: string
+    cliente_id: id
 
 
 

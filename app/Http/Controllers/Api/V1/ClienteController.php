@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
+use App\Models\TipoCliente;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
+    public function indexTipos()
+    {
+        $data = TipoCliente::all();
+        return response()->json($data);
+    }
     public function index()
     {
         $dateNow = date("Y-m-d");
@@ -43,7 +49,7 @@ class ClienteController extends Controller
         $data->contacto_nombre = $request->contacto_nombre;
         $data->contacto_telefono = $request->contacto_telefono;
         $data->contacto_email = $request->contacto_email;
-        $data->tipo = $request->tipo;
+        $data->tipo_cliente_id = $request->tipo_cliente_id;
 
         $data->save();
         return response()->json($data);
@@ -81,7 +87,7 @@ class ClienteController extends Controller
         $data->contacto_nombre = $request->contacto_nombre;
         $data->contacto_telefono = $request->contacto_telefono;
         $data->contacto_email = $request->contacto_email;
-        $data->tipo = $request->tipo;
+        $data->tipo_cliente_id = $request->tipo_cliente_id;
         $data->save();
         return response()->json([
             'message'=> 'Registro creado',

@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Cliente extends Model
+class TipoCliente extends Model
 {
     use HasFactory;
 
@@ -16,24 +17,7 @@ class Cliente extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre_completo',
-        'rfc',
-        'direccion',
-        'colonia',
-        'delegacion',
-        'estado',
-        'cp',
-        'telefono',
-        'limite_credito',
-        'dias_credito',
-        'mail',
-        'fecha_nac',
-        'tipo_cliente_id',
-        'contacto_nombre',
-        'contacto_telefono',
-        'contacto_email'
-        
-
+        'nombre',
     ];
 
     /**
@@ -45,8 +29,8 @@ class Cliente extends Model
         'id' => 'integer',
     ];
 
-    public function tipoCliente(): BelongsTo
+    public function cliente(): HasMany
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->hasMany(Cliente::class);
     }
 }

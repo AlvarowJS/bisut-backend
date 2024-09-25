@@ -1,16 +1,7 @@
 created:
-    - database/factories/VentaFactory.php
-    - database/factories/DetalleVentaFactory.php
-    - database/factories/OperacionFactory.php
-    - database/factories/KardexFactory.php
-    - database/migrations/2024_09_09_042506_create_ventas_table.php
-    - database/migrations/2024_09_09_042507_create_detalle_ventas_table.php
-    - database/migrations/2024_09_09_042508_create_operacions_table.php
-    - database/migrations/2024_09_09_042509_create_kardexes_table.php
-    - app/Models/Venta.php
-    - app/Models/DetalleVenta.php
-    - app/Models/Operacion.php
-    - app/Models/Kardex.php
+    - database/factories/TipoClienteFactory.php
+    - database/migrations/2024_09_24_234758_create_tipo_clientes_table.php
+    - app/Models/TipoCliente.php
 models:
     Role: { name: string, description: string, role_number: string }
     User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable', user_id: 'biginteger unsigned nullable' }
@@ -27,3 +18,4 @@ models:
     DetalleVenta: { cantidad_venta: number, precio_venta: number, producto_id: id }
     Operacion: { nombre: string, descripcion: string }
     Kardex: { fecha: date, documento: string, cantidadEntrada: number, vuEntrada: number, vtEntrada: number, cantidadSalida: number, vuSalida: number, vtSalida: number, CantidadSaldo: number, vuSaldo: number, vtSaldo: number, producto_id: id, operacion_id: id, compra_id: id, venta_id: id, almacen_id: id }
+    TipoCliente: { nombre: string, cliente_id: id }
