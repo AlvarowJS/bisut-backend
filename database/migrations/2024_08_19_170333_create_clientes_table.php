@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string('contacto_nombre')->nullable();
             $table->string('contacto_telefono')->nullable();
             $table->string('contacto_email')->nullable();
-            $table->string('tipo_cliente')->nullable();
             $table->foreignId('cliente_id');
             $table->foreignId('tipo_cliente_id')->nullable()->constrained('tipo_clientes');
             $table->timestamps();
