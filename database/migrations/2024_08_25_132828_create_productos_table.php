@@ -18,10 +18,11 @@ return new class extends Migration
             $table->float('precio1')->nullable();
             $table->float('precio2')->nullable();
             $table->float('precio3')->nullable();
-            $table->float('precioUnitario')->nullable();
-            $table->float('precioLista')->nullable();
+            $table->float('precio4')->nullable();
+            // $table->float('precioUnitario')->nullable();
+            // $table->float('precioLista')->nullable();
             $table->float('precioSuelto')->nullable();
-            $table->float('precioEspecial')->nullable();
+            // $table->float('precioEspecial')->nullable();
             $table->float('piezasPaquete')->nullable();
             $table->string('fiscal')->nullable();
             $table->integer('cajas')->nullable();

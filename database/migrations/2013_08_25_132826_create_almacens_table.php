@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('almacens', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('descripcion');
+            $table->string('direccion');
+            $table->string('telefono');
+            $table->integer('tipo');
             $table->timestamps();
         });
     }

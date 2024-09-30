@@ -9,6 +9,7 @@ trait GuardaImagenTrait
 {
     public function guardarImagen($carpeta, $nombreAtributo, $fotoInput, $request)
     {
+        $nombre = '';
         $ruta = public_path($carpeta);
         if (!File::isDirectory($ruta)) {
             $publicpath = 'storage/' . $carpeta;

@@ -17,7 +17,9 @@ class Almacen extends Model
      */
     protected $fillable = [
         'nombre',
-        'descripcion',
+        'direccion',
+        'telefono',
+        'tipo'
     ];
 
     /**

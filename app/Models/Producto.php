@@ -20,11 +20,16 @@ class Producto extends Model
         'precio1',
         'precio2',
         'precio3',
-        'precioUnitario',
-        'precioLista',
+        'precio4',
+        // 'precioUnitario',
+        // 'precioLista',
         'precioSuelto',
-        'precioEspecial',
+        // 'precioEspecial',
         'piezasPaquete',
+        'fiscal',
+        'cajas',
+        'cantidad',
+        'unidad',
         'foto'
     ];
 

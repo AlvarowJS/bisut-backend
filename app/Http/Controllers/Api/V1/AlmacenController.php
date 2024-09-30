@@ -18,7 +18,9 @@ class AlmacenController extends Controller
     {
         $data = new Almacen();
         $data->nombre = $request->nombre;
-        $data->descripcion = $request->descripcion;
+        $data->direccion = $request->direccion;
+        $data->telefono = $request->telefono;
+        $data->tipo = $request->tipo;
         $data->save();
         return response()->json($data);
     }
@@ -33,7 +35,9 @@ class AlmacenController extends Controller
     {
         $data = Almacen::find($id);
         $data ->nombre = $request->nombre;
-        $data ->descripcion = $request->descripcion;
+        $data->direccion = $request->direccion;
+        $data->telefono = $request->telefono;
+        $data->tipo = $request->tipo;
         $data->save();
         return response()->json($data);
     }
