@@ -17,6 +17,9 @@ class Producto extends Model
     protected $fillable = [
         'item',
         'descripcion',
+        'cajas',
+        'cantidad',
+        'cantidadxCaja',
         'precio1',
         'precio2',
         'precio3',
@@ -27,8 +30,7 @@ class Producto extends Model
         // 'precioEspecial',
         'piezasPaquete',
         'fiscal',
-        'cajas',
-        'cantidad',
+        
         'unidad',
         'foto'
     ];

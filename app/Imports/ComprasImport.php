@@ -55,23 +55,21 @@ class ComprasImport implements ToCollection
             //     break;
             // }
             // Obtener datos del Excel
-            $descripcion = $row[1];
-            $cajas = $row[2];
-            $cantidadxCaja = $row[3];
-            $cantidad = $row[4];
-            $precioUnitario = $row[5];
-            $familia = $row[6];
-            $grupo = $row[7];
-            $marca = $row[8];
-            $unidad = $row[9];
-            $precioLista = isset($row[10]) ? $row[10] : null;
-            $precio1 = isset($row[11]) ? $row[11] : null;
-            $precio2 = isset($row[12]) ? $row[12] : null;
-            $precio3 = isset($row[13]) ? $row[13] : null;
-            $precioEspecial = isset($row[14]) ? $row[14] : null;
-            $precioSuelto = isset($row[15]) ? $row[15] : null;
-            $piezasxpaquete = isset($row[16]) ? $row[16] : null;
-            $fiscal = isset($row[17]) ? $row[17] : null;
+            $descripcion = isset($row[1]) ? $row[1] : null;
+            $cajas = isset($row[2]) ? $row[2] : null;
+            $cantidadxCaja = isset($row[3]) ? $row[3] : null;
+            $cantidad = isset($row[4]) ? $row[4] : null;
+            $familia = isset($row[5]) ? $row[5] : null;
+            $grupo = isset($row[6]) ? $row[6] : null;
+            $marca = isset($row[7]) ? $row[7] : null;
+            $unidad = isset($row[8]) ? $row[8] : null;
+            $precio1 = isset($row[9]) ? $row[9] : null;
+            $precio2 = isset($row[10]) ? $row[10] : null;
+            $precio3 = isset($row[11]) ? $row[11] : null;
+            $precioSuelto = isset($row[12]) ? $row[12] : null;
+            $piezasxpaquete = isset($row[13]) ? $row[13] : null;
+            $tono = isset($row[14]) ? $row[14] : null;
+            $fiscal = isset($row[15]) ? $row[15] : null;
 
             // Buscar si el producto ya existe por 'item'
             $producto = Producto::where('item', $item)->first();
@@ -81,17 +79,15 @@ class ComprasImport implements ToCollection
                     'item' => $item,
                     'descripcion' => $descripcion,
                     'cajas' => $cajas,
+                    'cantidadxCaja' => $cantidadxCaja,
                     'cantidad' => $cantidad,
-                    'precioUnitario' => $precioUnitario,
                     'familia' => $familia,
                     'grupo' => $grupo,
                     'marca' => $marca,
                     'unidad' => $unidad,
-                    'precioLista' => $precioLista,
                     'precio1' => $precio1,
                     'precio2' => $precio2,
                     'precio3' => $precio3,
-                    'precioEspecial' => $precioEspecial,
                     'precioSuelto' => $precioSuelto,
                     'piezasPaquete' => $piezasxpaquete,
                     'fiscal' => $fiscal,
@@ -122,19 +118,18 @@ class ComprasImport implements ToCollection
                 $producto->item = $item;
                 $producto->descripcion = $descripcion;
                 $producto->cajas = $cajas;
+                $producto->cantidadxCaja = $cantidadxCaja;                
                 $producto->cantidad = $cantidad;
-                $producto->precioUnitario = $precioUnitario;
                 $producto->familia_id = $familia;
                 $producto->grupo_id = $grupo;
                 $producto->marca_id = $marca;
                 $producto->unidad = $unidad;
-                $producto->precioLista = $precioLista;
                 $producto->precio1 = $precio1;
                 $producto->precio2 = $precio2;
                 $producto->precio3 = $precio3;
-                $producto->precioEspecial = $precioEspecial;
                 $producto->precioSuelto = $precioSuelto;
                 $producto->piezasPaquete = $piezasxpaquete;
+                $producto->tono = $tono;
                 $producto->fiscal = $fiscal;
                 $producto->save();
             }
@@ -153,8 +148,8 @@ class ComprasImport implements ToCollection
             $detalleCompra->item = $item;
             $detalleCompra->descripcion = $descripcion;
             $detalleCompra->cantidad = $cantidad;
-            $detalleCompra->precio_unitario = $precioUnitario;
-            $detalleCompra->total = $cantidad * $precioUnitario;
+            $detalleCompra->precio_unitario = $precio1;
+            $detalleCompra->total = $cantidad * $precio1;
             $detalleCompra->compra_id = $compra->id;
             $detalleCompra->producto_id = $producto->id;
             $detalleCompra->save();
@@ -163,7 +158,7 @@ class ComprasImport implements ToCollection
 
             // // Registro de kardex
 
-            $this->registrarCompra($producto->id, $this->almacen, $compra->id, $this->fecha, $this->factura, $cantidad, $precioUnitario);
+            $this->registrarCompra($producto->id, $this->almacen, $compra->id, $this->fecha, $this->factura, $cantidad, $precio1);
         }
         $compra->total = $totalCompra;
         $compra->save();

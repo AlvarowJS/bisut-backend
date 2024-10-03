@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('item')->nullable();
             $table->string('descripcion')->nullable();
+            $table->integer('cantidadxCaja')->nullable();
             $table->float('precio1')->nullable();
             $table->float('precio2')->nullable();
             $table->float('precio3')->nullable();
