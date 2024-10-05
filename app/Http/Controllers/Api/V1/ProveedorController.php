@@ -64,10 +64,21 @@ class ProveedorController extends Controller
     public function destroy(string $id)
     {
         $data = Proveedor::find($id);
+
         if (!$data) {
-            return response()->json(["message" => "not found"], 404);
+            return response()->json(["message" => "Proveedor no encontrado"], 404);
         }
-        $data->delete();
-        return response()->json($data);
+
+        try {
+            $data->delete();
+            return response()->json(["message" => "Proveedor eliminado correctamente"], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Si el error es por clave foránea, arroja un mensaje específico
+            if ($e->getCode() == "23000") {
+                return response()->json(["message" => "No se puede eliminar el proveedor porque tiene compras asociadas"], 400);
+            }
+            // Si es otro error, lo manejas de otra manera
+            return response()->json(["message" => "Error al eliminar el proveedor"], 500);
+        }
     }
 }

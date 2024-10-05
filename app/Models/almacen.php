@@ -19,7 +19,9 @@ class Almacen extends Model
         'nombre',
         'direccion',
         'telefono',
-        'tipo'
+        'tipo',
+        'minimo',
+        'maximo'
     ];
 
     /**

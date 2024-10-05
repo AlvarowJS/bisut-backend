@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('direccion');
             $table->string('telefono');
             $table->integer('tipo');
+            $table->integer('maximo');
+            $table->integer('minimo');            
             $table->timestamps();
         });
     }

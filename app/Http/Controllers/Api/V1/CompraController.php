@@ -84,6 +84,7 @@ class CompraController extends Controller
                 $detalleCompra->descripcion = $producto->descripcion;
                 $detalleCompra->cantidad = $detalle['cantidad'];
                 $detalleCompra->precio_unitario = $detalle['precio_unitario'];
+                $detalleCompra->total = $detalle['cantidad'] * $detalle['precio_unitario'];
                 $detalleCompra->producto_id = $producto->id;
                 $detalleCompra->compra_id = $compra->id;
                 $detalleCompra->save();
