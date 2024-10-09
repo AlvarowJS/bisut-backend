@@ -108,9 +108,14 @@ models:
   #   venta_id: id
   #   almacen_id: id
 
-  TipoCliente:
-    nombre: string
-    cliente_id: id
+  # TipoCliente:
+  #   nombre: string
+  #   cliente_id: id
+
+  Stock:
+    cantidad: number
+    producto_id: id
+    almacen_id: id
 
 
 

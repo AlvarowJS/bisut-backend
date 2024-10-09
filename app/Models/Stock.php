@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Almacen extends Model
+class Stock extends Model
 {
     use HasFactory;
 
@@ -16,10 +16,9 @@ class Almacen extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
-        'direccion',
-        'telefono',
-        'tipo',        
+        'cantidad',
+        'producto_id',
+        'almacen_id',
     ];
 
     /**
@@ -29,10 +28,17 @@ class Almacen extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'producto_id' => 'integer',
+        'almacen_id' => 'integer',
     ];
 
-    public function compra(): HasMany
+    public function producto(): BelongsTo
     {
-        return $this->hasMany(Compra::class);
+        return $this->belongsTo(Producto::class);
+    }
+
+    public function almacen(): BelongsTo
+    {
+        return $this->belongsTo(Almacen::class);
     }
 }

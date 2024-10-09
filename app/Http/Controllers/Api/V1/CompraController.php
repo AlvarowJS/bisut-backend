@@ -73,6 +73,9 @@ class CompraController extends Controller
             $compra->proveedor_id = $proveedor;
             $compra->save();
 
+            // Stock
+            $stockController = new StockController();
+
             // Iterar sobre los detalles de la compra
             $totalCompra = 0;
             foreach ($request->detalles as $detalle) {
@@ -90,6 +93,9 @@ class CompraController extends Controller
                 $detalleCompra->save();
 
                 $totalCompra += $detalle['cantidad'] * $detalleCompra['precio_unitario'];
+
+                // Crear o actualizar stock
+                $stockController->store($producto->id, $tienda, $detalle['cantidad']);
                 // Buscar la última operación en el Kardex
                 $operacion = Kardex::where('producto_id', $producto->id)
                     ->where('almacen_id', $tienda)
@@ -145,10 +151,7 @@ class CompraController extends Controller
     }
     public function show(string $id)
     {
-        // $datos = Compra::find($id);
         $datos = Compra::with(['almacen','proveedor','detallesCompra'])->find($id);
-
-
         if (!$datos) {
             return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
         }

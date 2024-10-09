@@ -1,21 +1,22 @@
 created:
-    - database/factories/TipoClienteFactory.php
-    - database/migrations/2024_09_24_234758_create_tipo_clientes_table.php
-    - app/Models/TipoCliente.php
+    - database/factories/StockFactory.php
+    - database/migrations/2024_10_08_160256_create_stocks_table.php
+    - app/Models/Stock.php
 models:
-    Role: { name: string, description: string, role_number: string }
-    User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable', user_id: 'biginteger unsigned nullable' }
-    Cliente: { nombre_completo: string, rfc: string, direccion: string, colonia: string, delegacion: string, estado: string, cp: string, telefono: string, limite_credito: number, mail: string }
-    Proveedor: { nombre: string, direccion: string, telefono: string, mail: string, codigo_postal: string, estado: boolean }
-    almacen: { nombre: string, descripcion: string }
-    Compra: { factura: string, fecha: date, total: number, cliente_id: id }
-    Producto: { item: string, descripcion: string, precio1: number, precio2: number, precio3: number, precioUnitario: number, precioLista: number, precioSuelto: number, precioEspecial: number, piezasPaquete: number }
-    DetalleCompra: { item: string, descripcion: string, cajas: number, precio_unitario: number, producto_id: id, compra_id: id }
+    Cliente: { nombre_completo: 'string nullable', rfc: 'string nullable', direccion: 'string nullable', colonia: 'string nullable', delegacion: 'string nullable', estado: 'string nullable', cp: 'string nullable', telefono: 'string nullable', limite_credito: 'double nullable', dias_credito: 'integer nullable', mail: 'string nullable', fecha_nac: 'date nullable', contacto_nombre: 'string nullable', contacto_telefono: 'string nullable', contacto_email: 'string nullable', cliente_id: 'biginteger unsigned', tipo_cliente_id: 'biginteger unsigned nullable' }
+    Compra: { factura: string, fecha: date, total: double, almacen_id: 'biginteger unsigned nullable', proveedor_id: 'biginteger unsigned nullable' }
+    DetalleCompra: { item: string, descripcion: string, cantidad: 'integer nullable', cajas: 'string nullable', unidad: 'string nullable', precio_unitario: 'double nullable', total: 'double nullable', producto_id: 'biginteger unsigned nullable', compra_id: 'biginteger unsigned nullable' }
+    DetalleVenta: { cantidad_venta: string, precio_venta: string, producto_id: 'biginteger unsigned nullable' }
     Familia: { nombre: string, descripcion: string }
     Grupo: { nombre: string, descripcion: string }
+    Kardex: { fecha: date, documento: 'string nullable', cantidadEntrada: 'string nullable', vuEntrada: 'string nullable', vtEntrada: 'string nullable', cantidadSalida: 'string nullable', vuSalida: 'string nullable', vtSalida: 'string nullable', cantidadSaldo: 'string nullable', vuSaldo: 'string nullable', vtSaldo: 'string nullable', producto_id: 'biginteger unsigned nullable', operacion_id: 'biginteger unsigned nullable', compra_id: 'biginteger unsigned nullable', venta_id: 'biginteger unsigned nullable', almacen_id: 'biginteger unsigned nullable' }
     Marca: { nombre: string, descripcion: string }
-    Venta: { importe: number, descuento: number, subTotal: number, iva: number, flete: number, total: numner, almacen_id: id, user_id: id, cliente_id: id }
-    DetalleVenta: { cantidad_venta: number, precio_venta: number, producto_id: id }
     Operacion: { nombre: string, descripcion: string }
-    Kardex: { fecha: date, documento: string, cantidadEntrada: number, vuEntrada: number, vtEntrada: number, cantidadSalida: number, vuSalida: number, vtSalida: number, CantidadSaldo: number, vuSaldo: number, vtSaldo: number, producto_id: id, operacion_id: id, compra_id: id, venta_id: id, almacen_id: id }
-    TipoCliente: { nombre: string, cliente_id: id }
+    Producto: { item: 'string nullable', descripcion: 'string nullable', cantidadxCaja: 'integer nullable', precio1: 'double nullable', precio2: 'double nullable', precio3: 'double nullable', precio4: 'double nullable', precioSuelto: 'double nullable', piezasPaquete: 'double nullable', fiscal: 'string nullable', cajas: 'integer nullable', cantidad: 'integer nullable', unidad: 'string nullable', foto: 'text nullable', familia_id: 'biginteger unsigned nullable', grupo_id: 'biginteger unsigned nullable', marca_id: 'biginteger unsigned nullable' }
+    Proveedor: { nombre: string, direccion: string, telefono: string, mail: string, codigo_postal: string, estado: boolean, user_id: 'biginteger unsigned nullable' }
+    Role: { name: string, description: string, role_number: string }
+    TipoCliente: { nombre: string }
+    User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, status: boolean, remember_token: 'string:100 nullable', role_id: 'biginteger unsigned nullable', almacen_id: 'biginteger unsigned nullable' }
+    Venta: { importe: string, descuento: string, subTotal: string, iva: string, flete: string, total: string, almacen_id: 'biginteger unsigned nullable', user_id: 'biginteger unsigned nullable', cliente_id: 'biginteger unsigned nullable' }
+    Almacen: { nombre: string, direccion: string, telefono: string, tipo: integer, maximo: integer, minimo: integer }
+    Stock: { cantidad: number, producto_id: id, almacen_id: id }
