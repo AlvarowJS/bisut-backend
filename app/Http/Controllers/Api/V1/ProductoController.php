@@ -39,6 +39,7 @@ class ProductoController extends Controller
         $producto->precioEspecial = $request->precioEspecial;
         $producto->piezasPaquete = $request->piezasPaquete;
         $producto->unidad = $request->unidad;
+        $producto->tono = $request->tono;
         $producto->foto = $foto;
         $producto->familia_id = $request->familia_id;
         $producto->grupo_id = $request->grupo_id;
@@ -85,6 +86,7 @@ class ProductoController extends Controller
         // $producto->precioEspecial = $request->precioEspecial;
         $producto->piezasPaquete = $request->piezasPaquete;
         $producto->unidad = $request->unidad;
+        $producto->tono = $request->tono;
         $producto->foto = $foto;
         $producto->familia_id = $request->familia_id;
         $producto->grupo_id = $request->grupo_id;

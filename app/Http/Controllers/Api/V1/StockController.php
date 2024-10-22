@@ -13,19 +13,19 @@ class StockController extends Controller
 
 
     public function store($producto_id, $almacen_id, $cantidad)
-    {
+    {        
         $stock = Stock::where('producto_id', $producto_id)
             ->where('almacen_id', $almacen_id)
             ->first();
 
-        if ($stock) {
+        if (!$stock) {
             $stock = new Stock();
             $stock->producto_id = $producto_id;
-            $stock->producto_id = $producto_id;
-            $stock->producto_id = $producto_id;
+            $stock->cantidad = $cantidad;
+            $stock->almacen_id = $almacen_id;
         } else {
             $stock->cantidad += $cantidad;
-        }
+        }        
         $stock->save();
 
         return response()->json([

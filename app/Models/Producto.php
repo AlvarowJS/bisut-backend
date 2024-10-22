@@ -30,7 +30,7 @@ class Producto extends Model
         // 'precioEspecial',
         'piezasPaquete',
         'fiscal',
-        
+        'tono',
         'unidad',
         'foto'
     ];

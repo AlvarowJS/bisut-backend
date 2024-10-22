@@ -20,9 +20,7 @@ class AlmacenController extends Controller
         $data->nombre = $request->nombre;
         $data->direccion = $request->direccion;
         $data->telefono = $request->telefono;
-        $data->tipo = $request->tipo;
-        $data->minimo = $request->minimo;
-        $data->maximo = $request->maximo;
+        $data->tipo = $request->tipo;        
         $data->save();
         return response()->json($data);
     }
@@ -40,8 +38,6 @@ class AlmacenController extends Controller
         $data->direccion = $request->direccion;
         $data->telefono = $request->telefono;
         $data->tipo = $request->tipo;
-        $data->minimo = $request->minimo;
-        $data->maximo = $request->maximo;
         $data->save();
         return response()->json($data);
     }
