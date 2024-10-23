@@ -92,28 +92,7 @@ class ComprasImport implements ToCollection
                     'piezasPaquete' => $piezasxpaquete,
                     'fiscal' => $fiscal,
                 ]);
-            } else {
-                // Crear un nuevo producto si no existe
-                // Producto::create([
-                //     'item' => $item,
-                //     'descripcion' => $descripcion,
-                //     'cajas' => $cajas,
-                //     'cantidad' => $cantidad,
-                //     'precioUnitario' => $precioUnitario,
-                //     'familia_id' => $familia,
-                //     'grupo_id' => $grupo,
-                //     'marca_id' => $marca,
-                //     'unidad' => $unidad,
-                //     'precioLista' => $precioLista,
-                //     'precio1' => $precio1,
-                //     'precio2' => $precio2,
-                //     'precio3' => $precio3,
-                //     'precioEspecial' => $precioEspecial,
-                //     'precioSuelto' => $precioSuelto,
-                //     'piezasPaquete' => $piezasxpaquete,
-                //     'fiscal' => $fiscal,
-                // ]);
-
+            } else {        
                 $producto = new Producto();
                 $producto->item = $item;
                 $producto->descripcion = $descripcion;

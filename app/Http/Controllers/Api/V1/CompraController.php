@@ -33,7 +33,7 @@ class CompraController extends Controller
 
         // Subir y procesar el archivo Excel
         $file = $request->file('archivo');
-        
+
         try {
             // Pasar los datos adicionales al importador
             Excel::import(new ComprasImport($factura, $fecha, $proveedor, $almacen), $file);
@@ -51,7 +51,7 @@ class CompraController extends Controller
     }
     public function index()
     {
-        $data = Compra::with('proveedor','almacen')->get();
+        $data = Compra::with('proveedor', 'almacen')->get();
         return response()->json($data);
     }
 
@@ -59,7 +59,7 @@ class CompraController extends Controller
     {
         DB::beginTransaction();
         try {
-            $tienda = $request->almacen_id;            
+            $tienda = $request->almacen_id;
             $proveedor = $request->proveedor_id;
             $fecha = $request->fecha;
             $factura = $request->factura;
@@ -68,7 +68,7 @@ class CompraController extends Controller
             $compra = new Compra();
             $compra->factura = $factura;
             $compra->fecha = $fecha;
-            $compra->total = 0;            
+            $compra->total = 0;
             $compra->almacen_id = $tienda;
             $compra->proveedor_id = $proveedor;
             $compra->save();
@@ -80,7 +80,47 @@ class CompraController extends Controller
             $totalCompra = 0;
             foreach ($request->detalles as $detalle) {
                 $producto = Producto::where('item', $detalle['item'])->first();
-
+                if ($producto) {
+                    // Actualizar los precios y datos del producto existente
+                    $producto->update([
+                        'item' => $detalle['item'] ?? null,
+                        'descripcion' => $detalle['descripcion'] ?? null,
+                        'cajas' => $detalle['cajas'] ?? null,
+                        'cantidadxCaja' => $detalle['cantidadxCaja'] ?? null,
+                        'cantidad' => $detalle['cantidad'] ?? null,
+                        'familia_id' => $detalle['familia_id'] ?? null,
+                        'grupo_id' => $detalle['grupo_id'] ?? null,
+                        'marca_id' => $detalle['marca_id'] ?? null,
+                        'unidad' => $detalle['unidad'] ?? null,
+                        'precio1' => $detalle['precio1'] ?? null,
+                        'precio2' => $detalle['precio2'] ?? null,
+                        'precio3' => $detalle['precio3'] ?? null,
+                        'precioSuelto' => $detalle['precioSuelto'] ?? null,
+                        'piezasPaquete' => $detalle['piezasPaquete'] ?? null,
+                        'tono' => $detalle['tono'] ?? null,
+                        'fiscal' => $detalle['fiscal'] ?? null,
+                    ]);
+                } else {
+                    // Crear un nuevo producto
+                    $producto = new Producto();
+                    $producto->item = $detalle['item'] ?? null;
+                    $producto->descripcion = $detalle['descripcion'] ?? null;
+                    $producto->cajas = $detalle['cajas'] ?? null;
+                    $producto->cantidadxCaja = $detalle['cantidadxCaja'] ?? null;
+                    $producto->cantidad = $detalle['cantidad'] ?? null;
+                    $producto->familia_id = $detalle['familia_id'] ?? null;
+                    $producto->grupo_id = $detalle['grupo_id'] ?? null;
+                    $producto->marca_id = $detalle['marca_id'] ?? null;
+                    $producto->unidad = $detalle['unidad'] ?? null;
+                    $producto->precio1 = $detalle['precio1'] ?? null;
+                    $producto->precio2 = $detalle['precio2'] ?? null;
+                    $producto->precio3 = $detalle['precio3'] ?? null;
+                    $producto->precioSuelto = $detalle['precioSuelto'] ?? null;
+                    $producto->piezasPaquete = $detalle['piezasPaquete'] ?? null;
+                    $producto->tono = $detalle['tono'] ?? null;
+                    $producto->fiscal = $detalle['fiscal'] ?? null;
+                    $producto->save();
+                }
                 // Crear el detalle de la compra
                 $detalleCompra = new DetalleCompra();
                 $detalleCompra->item = $producto->item;
@@ -151,7 +191,7 @@ class CompraController extends Controller
     }
     public function show(string $id)
     {
-        $datos = Compra::with(['almacen','proveedor','detallesCompra'])->find($id);
+        $datos = Compra::with(['almacen', 'proveedor', 'detallesCompra'])->find($id);
         if (!$datos) {
             return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
         }
