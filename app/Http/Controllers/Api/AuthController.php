@@ -42,13 +42,14 @@ class AuthController extends Controller
             $user = Auth::user();
             $name = $user->name;
             $rol = $user->role;
+            $almacen = $user->almacen;
             $token = $user->createToken('api_token')->plainTextToken;
             return response()->json([
                 'accessToken' => $token,
                 'refreshToken' => $token,
                 'rol' => $user->role_id,
                 'userData' => [
-                   'ability' => [
+                    'ability' => [
                         [
                             'action' => 'manage',
                             'subject' => 'all'
@@ -57,14 +58,17 @@ class AuthController extends Controller
                     'aceessToken' => $token,
                     'avatar' => 'https://admin.alven-inmobiliaria.com.mx/assets/avatar-s-11.b6d7c056.jpg',
                     'email' => $user->email,
-                    'extras' => [                        
+                    'extras' => [
                         'eCommerceCartItemsCount' => 5
                     ],
                     'fullName' => $name,
                     'id' => $user->id,
                     'refresh_token' => $token,
-                    'role' => 'admin',
-                    'username' => $name,
+                    'role' => $rol->name,
+                    'role_id' => $rol->id,
+                    'almacen' => $almacen->nombre ?? 'admin',
+                    'almacen_id' => $almacen->id ?? 'admin',
+                    'userame' => $name,
                 ]
             ], 200);
         } else {
@@ -91,7 +95,7 @@ class AuthController extends Controller
     public function index()
     {
         // $usuarios = User::all();
-        $usuarios = User::with('role')->get();
+        $usuarios = User::with('role', 'almacen')->get();
         if ($usuarios->isEmpty()) {
             return response()->json(['message' => 'No se encontraron medicos'], Response::HTTP_NOT_FOUND);
         }

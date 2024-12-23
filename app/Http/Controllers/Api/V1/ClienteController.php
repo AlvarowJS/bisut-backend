@@ -43,6 +43,7 @@ class ClienteController extends Controller
         $data->cp = $request->cp;
         $data->telefono = $request->telefono;
         $data->limite_credito = $request->limite_credito;
+        $data->tipo_venta = $request->tipo_venta;
         $data->mail = $request->mail;
         $data->fecha_nac = $request->fecha_nac;
         $data->dias_credito = $request->dias_credito;
@@ -84,6 +85,7 @@ class ClienteController extends Controller
         $data->mail = $request->mail;
         $data->fecha_nac = $request->fecha_nac;
         $data->dias_credito = $request->dias_credito;
+        $data->tipo_venta = $request->tipo_venta;
         $data->contacto_nombre = $request->contacto_nombre;
         $data->contacto_telefono = $request->contacto_telefono;
         $data->contacto_email = $request->contacto_email;

@@ -26,6 +26,7 @@ class ProductoFactory extends Factory
             'precio1' => $this->faker->word(),
             'precio2' => $this->faker->word(),
             'precio3' => $this->faker->word(),
+            'precio4' => $this->faker->word(),
             'precioUnitario' => $this->faker->word(),
             'precioLista' => $this->faker->word(),
             'precioSuelto' => $this->faker->word(),

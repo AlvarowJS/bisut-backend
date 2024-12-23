@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('estado')->nullable();
             $table->string('cp')->nullable();
             $table->string('telefono')->nullable();
-            $table->float('limite_credito')->nullable();
+            $table->float('limite_credito')->nullable();            
             $table->integer('dias_credito')->nullable();
+            $table->integer('tipo_venta')->nullable();
             $table->string('mail')->nullable();
             $table->date('fecha_nac')->nullable();
             $table->string('contacto_nombre')->nullable();

@@ -26,6 +26,7 @@ class Cliente extends Model
         'telefono',
         'limite_credito',
         'dias_credito',
+        'tipo_venta',
         'mail',
         'fecha_nac',
         'tipo_cliente_id',
