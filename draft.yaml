@@ -70,21 +70,35 @@ models:
   #   producto_id: id
   #   compra_id: id
 
-  # Venta:
-  #   importe: number
-  #   descuento: number
-  #   subTotal: number
-  #   iva: number
-  #   flete: number
-  #   total: numner
-  #   almacen_id: id
-  #   user_id: id
-  #   cliente_id: id
+  Venta:
+    importe: number
+    descuento: number
+    subTotal: number
+    iva: number
+    flete: number
+    total: number
+    puntos: number
+    regalo: boolean
+    tipo_factura: string
+    modo_pago: string
+    tipo_pago: string
+    cfdi: string    
+    almacen_id: id
+    user_id: id
+    cliente_id: id
 
-  # DetalleVenta:
-  #   cantidad_venta: number
-  #   precio_venta: number
-  #   producto_id: id
+  DetalleVenta:
+    item: string
+    cantidad_venta: number
+    descripcion: string
+    descuento: number
+    importe: number
+    precio_suelto: number
+    precio_venta: number
+    stock: number
+    total_item: number
+    venta_id: id    
+    producto_id: id
   
   # Operacion: 
   #   nombre: string
@@ -112,10 +126,10 @@ models:
   #   nombre: string
   #   cliente_id: id
 
-  Stock:
-    cantidad: number
-    producto_id: id
-    almacen_id: id
+  # Stock:
+  #   cantidad: number
+  #   producto_id: id
+  #   almacen_id: id
 
 
 

@@ -22,6 +22,12 @@ class Venta extends Model
         'iva',
         'flete',
         'total',
+        'puntos',
+        'regalo',
+        'tipo_factura',
+        'modo_pago',
+        'tipo_pago',
+        'cfdi',
         'almacen_id',
         'user_id',
         'cliente_id',
@@ -34,6 +40,7 @@ class Venta extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'regalo' => 'boolean',
         'almacen_id' => 'integer',
         'user_id' => 'integer',
         'cliente_id' => 'integer',

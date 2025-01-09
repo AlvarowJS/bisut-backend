@@ -16,8 +16,16 @@ class DetalleVenta extends Model
      * @var array
      */
     protected $fillable = [
+        'item',
         'cantidad_venta',
+        'descripcion',
+        'descuento',
+        'importe',
+        'precio_suelto',
         'precio_venta',
+        'stock',
+        'total_item',
+        'venta_id',
         'producto_id',
     ];
 
@@ -28,8 +36,14 @@ class DetalleVenta extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'venta_id' => 'integer',
         'producto_id' => 'integer',
     ];
+
+    public function venta(): BelongsTo
+    {
+        return $this->belongsTo(Venta::class);
+    }
 
     public function producto(): BelongsTo
     {

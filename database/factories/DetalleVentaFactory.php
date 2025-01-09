@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\DetalleVenta;
 use App\Models\Producto;
+use App\Models\Venta;
 
 class DetalleVentaFactory extends Factory
 {
@@ -22,8 +23,16 @@ class DetalleVentaFactory extends Factory
     public function definition(): array
     {
         return [
+            'item' => $this->faker->word(),
             'cantidad_venta' => $this->faker->word(),
+            'descripcion' => $this->faker->word(),
+            'descuento' => $this->faker->word(),
+            'importe' => $this->faker->word(),
+            'precio_suelto' => $this->faker->word(),
             'precio_venta' => $this->faker->word(),
+            'stock' => $this->faker->word(),
+            'total_item' => $this->faker->word(),
+            'venta_id' => Venta::factory(),
             'producto_id' => Producto::factory(),
         ];
     }

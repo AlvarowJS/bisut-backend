@@ -76,5 +76,52 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Transferencia',
             'descripcion' => 'Cuando se transfiere de una tienda a otra',
         ]);
+
+        // Probablemente se tenga que comentar:
+        \App\Models\Cliente::factory()->create([
+            'nombre_completo' => 'Juan Pérez',
+            'rfc' => 'JUAP890101XYZ',
+            'direccion' => 'Calle Falsa 123',
+            'colonia' => 'Centro',
+            'delegacion' => 'Cuauhtémoc',
+            'estado' => 'Ciudad de México',
+            'cp' => '06000',
+            'telefono' => '5551234567',
+            'limite_credito' => 50000.00,
+            'dias_credito' => 30,
+            'tipo_venta' => 1,
+            'mail' => 'juan.perez@example.com',
+            'fecha_nac' => '1989-01-01',
+            'tipo_cliente_id' => 1,
+            'contacto_nombre' => 'Maria López',
+            'contacto_telefono' => '5559876543',
+            'contacto_email' => 'maria.lopez@example.com'
+        ]);
+
+        \App\Models\Proveedor::factory()->create([
+            'nombre' => 'Distribuidora Comercial S.A.',
+            'direccion' => 'Av. Principal 456, Colonia Industrial',
+            'telefono' => '5556789012',
+            'mail' => 'contacto@distribuidora.com',
+            'codigo_postal' => '09010',
+            'estado' => true,
+            'user_id' => 1,
+        ]);
+        
+
+        \App\Models\Grupo::factory()->create([
+            'nombre' => 'Grupo Prueba',
+            'descripcion' => 'Descripcion de grupo prueba',
+        ]);
+
+        \App\Models\Marca::factory()->create([
+            'nombre' => 'Marca Prueba',
+            'descripcion' => 'Descripcion de marca prueba',
+        ]);
+
+        \App\Models\Familia::factory()->create([
+            'nombre' => 'Familia Prueba',
+            'descripcion' => 'Descripcion de familia prueba',
+        ]);
     }
 }   

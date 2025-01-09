@@ -13,9 +13,16 @@ return new class extends Migration
     {
         Schema::create('detalle_ventas', function (Blueprint $table) {
             $table->id();
+            $table->string('item');
             $table->string('cantidad_venta');
+            $table->string('descripcion');
+            $table->string('descuento');
+            $table->string('importe');
+            $table->string('precio_suelto');
             $table->string('precio_venta');
-            $table->string('total');
+            $table->string('stock');
+            $table->string('total_item');            
+            $table->foreignId('venta_id')->nullable()->constrained('ventas');
             $table->foreignId('producto_id')->nullable()->constrained('productos');
             $table->timestamps();
         });
