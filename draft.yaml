@@ -82,7 +82,8 @@ models:
     tipo_factura: string
     modo_pago: string
     tipo_pago: string
-    cfdi: string    
+    cfdi: string 
+    fecha: date
     almacen_id: id
     user_id: id
     cliente_id: id

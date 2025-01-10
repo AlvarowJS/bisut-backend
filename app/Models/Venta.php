@@ -28,6 +28,7 @@ class Venta extends Model
         'modo_pago',
         'tipo_pago',
         'cfdi',
+        'fecha',
         'almacen_id',
         'user_id',
         'cliente_id',
@@ -41,6 +42,7 @@ class Venta extends Model
     protected $casts = [
         'id' => 'integer',
         'regalo' => 'boolean',
+        'fecha' => 'date',
         'almacen_id' => 'integer',
         'user_id' => 'integer',
         'cliente_id' => 'integer',

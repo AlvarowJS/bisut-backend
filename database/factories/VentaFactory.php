@@ -36,6 +36,7 @@ class VentaFactory extends Factory
             'modo_pago' => $this->faker->word(),
             'tipo_pago' => $this->faker->word(),
             'cfdi' => $this->faker->word(),
+            'fecha' => $this->faker->date(),
             'almacen_id' => Almacen::factory(),
             'user_id' => User::factory(),
             'cliente_id' => Cliente::factory(),

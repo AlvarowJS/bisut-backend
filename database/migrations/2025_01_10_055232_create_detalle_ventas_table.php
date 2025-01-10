@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('precio_suelto');
             $table->string('precio_venta');
             $table->string('stock');
-            $table->string('total_item');            
-            $table->foreignId('venta_id')->nullable()->constrained('ventas');
+            $table->string('total_item');                        
             $table->foreignId('producto_id')->nullable()->constrained('productos');
+            $table->foreignId('venta_id')->nullable()->constrained('ventas');
             $table->timestamps();
         });
     }

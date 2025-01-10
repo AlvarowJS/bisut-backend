@@ -24,10 +24,11 @@ return new class extends Migration
             $table->string('tipo_factura');
             $table->string('modo_pago');
             $table->string('tipo_pago');
-            $table->string('cfdi');            
+            $table->string('cfdi');
+            $table->date('fecha');
             $table->foreignId('almacen_id')->nullable()->constrained('almacens');
             $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('cliente_id')->nullable()->constrained('clientes');                        
+            $table->foreignId('cliente_id')->nullable()->constrained('clientes');            
             $table->timestamps();
         });
     }

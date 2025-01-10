@@ -123,5 +123,12 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Familia Prueba',
             'descripcion' => 'Descripcion de familia prueba',
         ]);
+
+        \App\Models\Almacen::factory()->create([
+            'nombre' => 'Almacen Vargas',
+            'direccion' => 'San diego 250',
+            'telefono' => '993340954',
+            'tipo' => 1
+        ]);
     }
 }   

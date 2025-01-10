@@ -22,7 +22,6 @@ class AlmacenFactory extends Factory
     {
         return [
             'nombre' => $this->faker->word(),
-            'descripcion' => $this->faker->word(),
         ];
     }
 }

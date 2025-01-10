@@ -1,8 +1,8 @@
 created:
     - database/factories/VentaFactory.php
     - database/factories/DetalleVentaFactory.php
-    - database/migrations/2025_01_09_165250_create_ventas_table.php
-    - database/migrations/2025_01_09_165251_create_detalle_ventas_table.php
+    - database/migrations/2025_01_10_055231_create_ventas_table.php
+    - database/migrations/2025_01_10_055232_create_detalle_ventas_table.php
     - app/Models/Venta.php
     - app/Models/DetalleVenta.php
 models:
@@ -20,6 +20,6 @@ models:
     Role: { name: string, description: string, role_number: string }
     TipoCliente: { nombre: string }
     User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, status: boolean, remember_token: 'string:100 nullable', role_id: 'biginteger unsigned nullable', almacen_id: 'biginteger unsigned nullable' }
-    Venta: { importe: number, descuento: number, subTotal: number, iva: number, flete: number, total: number, puntos: number, regalo: boolean, tipo_factura: string, modo_pago: string, tipo_pago: string, cfdi: string, almacen_id: id, user_id: id, cliente_id: id }
+    Venta: { importe: number, descuento: number, subTotal: number, iva: number, flete: number, total: number, puntos: number, regalo: boolean, tipo_factura: string, modo_pago: string, tipo_pago: string, cfdi: string, fecha: date, almacen_id: id, user_id: id, cliente_id: id }
     Almacen: { nombre: string, direccion: string, telefono: string, tipo: integer, maximo: integer, minimo: integer }
     Stock: { cantidad: number, producto_id: id, almacen_id: id }
