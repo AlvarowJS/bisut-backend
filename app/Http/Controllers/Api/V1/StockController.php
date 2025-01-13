@@ -33,6 +33,27 @@ class StockController extends Controller
         ], 200);
     }
 
+    public function storeVenta($producto_id, $almacen_id, $cantidad)
+    {
+        $stock = Stock::where('producto_id', $producto_id)
+            ->where('almacen_id', $almacen_id)
+            ->first();
+        
+            if(!$stock) {
+                return response()->json([
+                    'message' => 'Stock no encontrado'
+                ], 404);
+            }else{
+                $stock->cantidad -= $cantidad;
+            }
+
+            $stock->save();
+            return response()->json([
+                'message' => 'Stock actualizado correctamente'
+            ], 200);
+
+    }
+
 
     public function show(string $id)
     {

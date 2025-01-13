@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Venta;
@@ -25,8 +26,7 @@ class VentaController extends Controller
         DB::beginTransaction();
         try {
             $tienda = $request->almacen_id;
-            $fecha = $request->fecha;
-            $factura = $request->factura;
+            $fecha = $request->fecha;            
 
             // Crear la venta
             $venta = new Venta();
@@ -43,10 +43,20 @@ class VentaController extends Controller
             $venta->tipo_pago = $request->tipo_pago;
             $venta->cfdi = $request->cfdi;
             $venta->tienda = $tienda;
-            $venta->cfdi = $request->cfdi;
-            $venta->cfdi = $request->cfdi;
+            $venta->fecha = $fecha;
+            $venta->save();
 
+            // Stock
+            $stockController = new StockController();
 
+            //iterar
+            foreach($request->detalles as $detalle)
+            {
+                $producto = Producto::where('item', $detalle['item'])->first();
+                if($producto) {
+                    // Creara el producto en la venta 
+                }
+            }
 
         } catch (\Exception $e) {
             DB::rollBack();
