@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Venta extends Model
 {
@@ -16,6 +17,9 @@ class Venta extends Model
      * @var array
      */
     protected $fillable = [
+        'identificador',
+        'medio_pago',
+        'medio_pago_monto',
         'importe',
         'descuento',
         'subTotal',
@@ -25,10 +29,11 @@ class Venta extends Model
         'puntos',
         'regalo',
         'tipo_factura',
-        'modo_pago',
         'tipo_pago',
+        'modo_pago',
         'cfdi',
         'fecha',
+        'hora',
         'almacen_id',
         'user_id',
         'cliente_id',
@@ -42,7 +47,7 @@ class Venta extends Model
     protected $casts = [
         'id' => 'integer',
         'regalo' => 'boolean',
-        'fecha' => 'date',
+        // 'fecha' => 'date',
         'almacen_id' => 'integer',
         'user_id' => 'integer',
         'cliente_id' => 'integer',
@@ -57,7 +62,10 @@ class Venta extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public function detallesVenta(): HasMany
+    {
+        return $this->hasMany(DetalleVenta::class);
+    }
     public function cliente(): BelongsTo
     {
         return $this->belongsTo(Cliente::class);

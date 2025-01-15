@@ -71,35 +71,39 @@ models:
   #   compra_id: id
 
   Venta:
+    identificador: string
+    medio_pago: string
+    medio_pago_monto: number
     importe: number
     descuento: number
     subTotal: number
     iva: number
     flete: number
-    total: number
+    total: number    
     puntos: number
     regalo: boolean
     tipo_factura: string
-    modo_pago: string
     tipo_pago: string
+    modo_pago: string
     cfdi: string 
     fecha: date
+    hora: time
     almacen_id: id
     user_id: id
     cliente_id: id
 
-  DetalleVenta:
-    item: string
-    cantidad_venta: number
-    descripcion: string
-    descuento: number
-    importe: number
-    precio_suelto: number
-    precio_venta: number
-    stock: number
-    total_item: number
-    venta_id: id    
-    producto_id: id
+  # DetalleVenta:
+  #   item: string
+  #   cantidad_venta: number
+  #   descripcion: string
+  #   descuento: number
+  #   importe: number
+  #   precio_suelto: number
+  #   precio_venta: number
+  #   stock: number
+  #   total_item: number
+  #   venta_id: id    
+  #   producto_id: id
   
   # Operacion: 
   #   nombre: string

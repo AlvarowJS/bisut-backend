@@ -1,10 +1,7 @@
 created:
     - database/factories/VentaFactory.php
-    - database/factories/DetalleVentaFactory.php
-    - database/migrations/2025_01_10_055231_create_ventas_table.php
-    - database/migrations/2025_01_10_055232_create_detalle_ventas_table.php
+    - database/migrations/2025_01_14_214708_create_ventas_table.php
     - app/Models/Venta.php
-    - app/Models/DetalleVenta.php
 models:
     Cliente: { nombre_completo: 'string nullable', rfc: 'string nullable', direccion: 'string nullable', colonia: 'string nullable', delegacion: 'string nullable', estado: 'string nullable', cp: 'string nullable', telefono: 'string nullable', limite_credito: 'double nullable', dias_credito: 'integer nullable', mail: 'string nullable', fecha_nac: 'date nullable', contacto_nombre: 'string nullable', contacto_telefono: 'string nullable', contacto_email: 'string nullable', cliente_id: 'biginteger unsigned', tipo_cliente_id: 'biginteger unsigned nullable' }
     Compra: { factura: string, fecha: date, total: double, almacen_id: 'biginteger unsigned nullable', proveedor_id: 'biginteger unsigned nullable' }
@@ -20,6 +17,6 @@ models:
     Role: { name: string, description: string, role_number: string }
     TipoCliente: { nombre: string }
     User: { name: string, phone: string, email: string, email_verified_at: 'timestamp nullable', password: string, status: boolean, remember_token: 'string:100 nullable', role_id: 'biginteger unsigned nullable', almacen_id: 'biginteger unsigned nullable' }
-    Venta: { importe: number, descuento: number, subTotal: number, iva: number, flete: number, total: number, puntos: number, regalo: boolean, tipo_factura: string, modo_pago: string, tipo_pago: string, cfdi: string, fecha: date, almacen_id: id, user_id: id, cliente_id: id }
+    Venta: { identificador: string, medio_pago: string, medio_pago_monto: number, importe: number, descuento: number, subTotal: number, iva: number, flete: number, total: number, puntos: number, regalo: boolean, tipo_factura: string, tipo_pago: string, modo_pago: string, cfdi: string, fecha: date, hora: time, almacen_id: id, user_id: id, cliente_id: id }
     Almacen: { nombre: string, direccion: string, telefono: string, tipo: integer, maximo: integer, minimo: integer }
     Stock: { cantidad: number, producto_id: id, almacen_id: id }

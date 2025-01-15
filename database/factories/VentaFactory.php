@@ -24,6 +24,9 @@ class VentaFactory extends Factory
     public function definition(): array
     {
         return [
+            'identificador' => $this->faker->word(),
+            'medio_pago' => $this->faker->word(),
+            'medio_pago_monto' => $this->faker->word(),
             'importe' => $this->faker->word(),
             'descuento' => $this->faker->word(),
             'subTotal' => $this->faker->word(),
@@ -33,10 +36,11 @@ class VentaFactory extends Factory
             'puntos' => $this->faker->word(),
             'regalo' => $this->faker->boolean(),
             'tipo_factura' => $this->faker->word(),
-            'modo_pago' => $this->faker->word(),
             'tipo_pago' => $this->faker->word(),
+            'modo_pago' => $this->faker->word(),
             'cfdi' => $this->faker->word(),
             'fecha' => $this->faker->date(),
+            'hora' => $this->faker->time(),
             'almacen_id' => Almacen::factory(),
             'user_id' => User::factory(),
             'cliente_id' => Cliente::factory(),
