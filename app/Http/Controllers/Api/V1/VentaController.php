@@ -59,7 +59,7 @@ class VentaController extends Controller
             $venta->cfdi = $request->cfdi;
             $venta->almacen_id = $tienda;
             $venta->fecha = $fecha;
-            $venta->hora = $request->hora;
+            $venta->hora = date('H:i:s', strtotime($request->hora));
             $venta->user_id = $userCurrent;
             $venta->cliente_id = $request->cliente_id;
             $venta->user_id = $userCurrent;
