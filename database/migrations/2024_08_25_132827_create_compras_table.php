@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('factura');
             $table->date('fecha');
             $table->float('total');
-            $table->foreignId('almacen_id')->nullable()->constrained('almacens');            
+            $table->foreignId('almacen_id')->nullable()->constrained('almacens');
             $table->foreignId('proveedor_id')->nullable()->constrained('proveedors');            
             $table->timestamps();
         });

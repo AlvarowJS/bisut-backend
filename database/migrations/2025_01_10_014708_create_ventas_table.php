@@ -22,17 +22,17 @@ return new class extends Migration
             $table->string('iva');
             $table->string('flete');
             $table->string('total');
-            $table->string('puntos');
-            $table->boolean('regalo');
-            $table->string('tipo_factura');
-            $table->string('tipo_pago');
-            $table->string('modo_pago');
+            $table->string('puntos')->nullable();
+            $table->boolean('regalo')->nullable();
+            $table->string('tipo_factura')->nullable();
+            $table->string('tipo_pago')->nullable();
+            $table->string('modo_pago')->nullable();
             $table->string('cfdi');
             $table->date('fecha');
-            $table->time('hora');
-            $table->foreignId('almacen_id');
-            $table->foreignId('user_id');
-            $table->foreignId('cliente_id');
+            $table->time('hora');            
+            $table->foreignId('almacen_id')->nullable()->constrained('almacens');            
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('cliente_id')->nullable()->constrained('clientes');            
             $table->timestamps();
         });
     }
