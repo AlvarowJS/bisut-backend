@@ -8,23 +8,24 @@ use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Venta;
+use App\Traits\KardexTrait;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class VentaController extends Controller
 {
-
+    use KardexTrait;
     public function ultimoId($tipoFactura)
     {
         $data = Venta::where('tipo_factura', $tipoFactura)->get();
-        return  count($data)+1;
+        return  count($data) + 1;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = Venta::with('detallesVenta', 'almacen', 'user', 'cliente')->get(); 
+        $data = Venta::with('detallesVenta', 'almacen', 'user', 'cliente')->get();
         return response()->json($data);
     }
 
@@ -92,6 +93,8 @@ class VentaController extends Controller
                     $detallesVenta->save();
 
                     $stockController->storeVenta($producto->id, $tienda, $detalle['cantidad_venta']);
+                    // kardex
+                    $this->registrarVenta($producto->id, $tienda, $venta->id, $fecha, $valIdentificador, $detalle['cantidad_venta'], $detalle['precio_venta']);
                 } else {
                     throw new \Exception('Producto no encontrado: ' . $detalle['item']);
                 }
@@ -113,7 +116,7 @@ class VentaController extends Controller
      */
     public function show(string $id)
     {
-        $datos = Venta::with(['almacen', 'cliente', 'detallesVenta','user'])->find($id);
+        $datos = Venta::with(['almacen', 'cliente', 'detallesVenta', 'user'])->find($id);
         if (!$datos) {
             return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
         }
