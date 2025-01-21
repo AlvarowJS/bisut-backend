@@ -43,11 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('v1/almacen', Almacen::class);
     Route::apiResource('v1/proveedor', Proveedor::class);
     Route::apiResource('v1/productos', Producto::class);
+    Route::get('v1/all-productos', [Producto::class, 'mostrarTodo']);
     Route::get('/v1/stock/{tiendaId}/{productoId}', [Producto::class, 'show']);
     Route::apiResource('v1/compras', Compra::class);
     Route::apiResource('v1/ventas', Venta::class);
     Route::apiResource('v1/kardex', Kardex::class);
     Route::post('v1/producto-foto', [Producto::class, 'updateFoto']);
     Route::post('v1/importar-compra', [Compra::class, 'importarCompras']);
-
 });

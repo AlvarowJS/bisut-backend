@@ -25,7 +25,10 @@ class VentaController extends Controller
      */
     public function index()
     {
-        $data = Venta::with('detallesVenta', 'almacen', 'user', 'cliente')->get();
+        $tipo = request()->input('tipo');
+        $data = Venta::with('detallesVenta', 'almacen', 'user', 'cliente')
+            ->where('tipo_factura', $tipo)
+            ->get();
         return response()->json($data);
     }
 

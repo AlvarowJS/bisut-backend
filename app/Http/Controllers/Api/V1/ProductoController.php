@@ -12,15 +12,29 @@ class ProductoController extends Controller
 {
     use GuardaImagenTrait;
     use StockTrait;
+    public function mostrarTodo()
+    {
+        $productos = Producto::with('familia', 'grupo', 'marca')->get();
+        return response()->json($productos);
+    }
     public function index()
     {
+        $data = [];
         $tiendaId = request()->input('tiendaId');
         $productos = Producto::with('familia', 'grupo', 'marca')->get();
+        
+        if (!$tiendaId) {
+            $data = $productos->map(function ($producto) use ($tiendaId) {
+                $producto->stock = "seleccione una tienda";
+                return $producto;
+            });
+        } else {
+            $data = $productos->map(function ($producto) use ($tiendaId) {
+                $producto->stock = $this->verStock($tiendaId, $producto->id);
+                return $producto;
+            });
+        }
 
-        $data = $productos->map(function ($producto) use ($tiendaId) {
-            $producto->stock = $this->verStock($tiendaId, $producto->id);
-            return $producto;
-        });
         return response()->json($data);
     }
 
@@ -35,8 +49,8 @@ class ProductoController extends Controller
         $producto->precio1 = $request->precio1;
         $producto->precio2 = $request->precio2;
         $producto->precio3 = $request->precio3;
-        $producto->precio4 = $request->precio4;        
-        $producto->precioSuelto = $request->precioSuelto;        
+        $producto->precio4 = $request->precio4;
+        $producto->precioSuelto = $request->precioSuelto;
         $producto->piezasPaquete = $request->piezasPaquete;
         $producto->unidad = $request->unidad;
         $producto->tono = $request->tono;
