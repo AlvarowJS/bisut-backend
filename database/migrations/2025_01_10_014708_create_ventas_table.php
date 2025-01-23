@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('tipo_factura')->nullable();
             $table->string('tipo_pago')->nullable();
             $table->string('modo_pago')->nullable();
-            $table->string('cfdi');
+            $table->string('cfdi')->nullable();
             $table->date('fecha');
             $table->time('hora');            
             $table->foreignId('almacen_id')->nullable()->constrained('almacens');            

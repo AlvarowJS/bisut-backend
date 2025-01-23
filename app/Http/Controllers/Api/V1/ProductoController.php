@@ -22,21 +22,22 @@ class ProductoController extends Controller
         $data = [];
         $tiendaId = request()->input('tiendaId');
         $productos = Producto::with('familia', 'grupo', 'marca')->get();
-        
+    
         if (!$tiendaId) {
-            $data = $productos->map(function ($producto) use ($tiendaId) {
-                $producto->stock = "seleccione una tienda";
+            $data = $productos->map(function ($producto) {
+                $producto->setAttribute('stock', "Seleccione una tienda");
                 return $producto;
             });
         } else {
             $data = $productos->map(function ($producto) use ($tiendaId) {
-                $producto->stock = $this->verStock($tiendaId, $producto->id);
+                $producto->setAttribute('stock', $this->verStock($tiendaId, $producto->id));
                 return $producto;
             });
         }
-
+    
         return response()->json($data);
     }
+    
 
     public function store(Request $request)
     {
@@ -50,6 +51,8 @@ class ProductoController extends Controller
         $producto->precio2 = $request->precio2;
         $producto->precio3 = $request->precio3;
         $producto->precio4 = $request->precio4;
+        $producto->minimo = $request->minimo;
+        $producto->maximo = $request->maximo;
         $producto->precioSuelto = $request->precioSuelto;
         $producto->piezasPaquete = $request->piezasPaquete;
         $producto->unidad = $request->unidad;
@@ -95,6 +98,8 @@ class ProductoController extends Controller
         $producto->precio2 = $request->precio2;
         $producto->precio3 = $request->precio3;
         $producto->precio4 = $request->precio4;
+        $producto->minimo = $request->minimo;
+        $producto->maximo = $request->maximo;
         $producto->precioSuelto = $request->precioSuelto;
         $producto->piezasPaquete = $request->piezasPaquete;
         $producto->unidad = $request->unidad;

@@ -23,10 +23,12 @@ class Producto extends Model
         'precio1',
         'precio2',
         'precio3',
-        'precio4',
+        'precio4', 
         'precioSuelto',
         'piezasPaquete',
         'fiscal',
+        'minimo',
+        'maximo',
         'tono',
         'unidad',
         'foto'

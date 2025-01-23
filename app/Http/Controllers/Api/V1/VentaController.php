@@ -26,8 +26,16 @@ class VentaController extends Controller
     public function index()
     {
         $tipo = request()->input('tipo');
+        $fechaInicio = request()->input('fecha-inicio');
+        $fechaFin = request()->input('fecha-fin');
         $data = Venta::with('detallesVenta', 'almacen', 'user', 'cliente')
-            ->where('tipo_factura', $tipo)
+            // ->where('tipo_factura', $tipo)
+            ->when($tipo, function ($query) use ($tipo) {
+                return $query->where('tipo_factura', $tipo);
+            })
+            ->when($fechaInicio && $fechaFin, function ($query) use ($fechaInicio, $fechaFin) {
+                return $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+            })
             ->get();
         return response()->json($data);
     }

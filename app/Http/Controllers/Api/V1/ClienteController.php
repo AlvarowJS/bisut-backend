@@ -104,6 +104,9 @@ class ClienteController extends Controller
         if(!$data) {
             return response()->json(['message'=> 'Registro no encontrado'],404);
         }
+        if ($data->ventas()->exists()) {
+            return response()->json(['message' => 'No se puede eliminar. El cliente tiene ventas registradas.'], 400);
+        }
         $data->delete();
         return response()->json(['message'=> 'Registro eliminado'],200);
     }

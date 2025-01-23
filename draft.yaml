@@ -27,7 +27,10 @@ models:
 
   # almacen:
   #   nombre: string
-  #   descripcion: string
+  #   direccion: string
+  #   telefono: string
+  #   rfc: string
+  #   tipo: id
 
   # Compra:
   #   factura: string
@@ -58,6 +61,8 @@ models:
   #   precioSuelto: number
   #   precioEspecial: number
   #   piezasPaquete: number
+  #   minimo: number
+  #   maximo: number
   #   familia_id: id
   #   grupo_id: id
   #   marca_id: id

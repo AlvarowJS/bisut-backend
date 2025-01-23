@@ -95,6 +95,9 @@ class CompraController extends Controller
                         'precio1' => $detalle['precio1'] ?? null,
                         'precio2' => $detalle['precio2'] ?? null,
                         'precio3' => $detalle['precio3'] ?? null,
+                        'precio4' => $detalle['precio4'] ?? null,
+                        'minimo' => $detalle['minimo'] ?? null,
+                        'maximo' => $detalle['maximo'] ?? null,
                         'precioSuelto' => $detalle['precioSuelto'] ?? null,
                         'piezasPaquete' => $detalle['piezasPaquete'] ?? null,
                         'tono' => $detalle['tono'] ?? null,
@@ -115,6 +118,9 @@ class CompraController extends Controller
                     $producto->precio1 = $detalle['precio1'] ?? null;
                     $producto->precio2 = $detalle['precio2'] ?? null;
                     $producto->precio3 = $detalle['precio3'] ?? null;
+                    $producto->precio4 = $detalle['precio4'] ?? null;
+                    $producto->minimo = $detalle['minimo'] ?? null;
+                    $producto->maximo = $detalle['maximo'] ?? null;
                     $producto->precioSuelto = $detalle['precioSuelto'] ?? null;
                     $producto->piezasPaquete = $detalle['piezasPaquete'] ?? null;
                     $producto->tono = $detalle['tono'] ?? null;

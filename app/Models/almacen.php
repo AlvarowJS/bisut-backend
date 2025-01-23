@@ -20,6 +20,7 @@ class Almacen extends Model
         'direccion',
         'telefono',
         'tipo',        
+        'rfc'
     ];
 
     /**

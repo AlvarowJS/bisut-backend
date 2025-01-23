@@ -33,7 +33,7 @@ class Cliente extends Model
         'contacto_nombre',
         'contacto_telefono',
         'contacto_email'
-        
+
 
     ];
 
@@ -49,5 +49,9 @@ class Cliente extends Model
     public function tipoCliente(): BelongsTo
     {
         return $this->belongsTo(Cliente::class);
+    }
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'cliente_id');
     }
 }

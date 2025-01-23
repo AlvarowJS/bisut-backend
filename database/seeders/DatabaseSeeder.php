@@ -128,6 +128,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Almacen Vargas',
             'direccion' => 'San diego 250',
             'telefono' => '993340954',
+            'rfc' => 'CUHC7005259A7',
             'tipo' => 1
         ]);
     }
