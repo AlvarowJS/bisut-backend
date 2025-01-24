@@ -132,13 +132,13 @@ class CompraController extends Controller
                 $detalleCompra->item = $producto->item;
                 $detalleCompra->descripcion = $producto->descripcion;
                 $detalleCompra->cantidad = $detalle['cantidad'];
-                $detalleCompra->precio_unitario = $detalle['precio_unitario'];
-                $detalleCompra->total = $detalle['cantidad'] * $detalle['precio_unitario'];
+                $detalleCompra->precio_unitario = $detalle['precioSuelto'];
+                $detalleCompra->total = $detalle['cantidad'] * $detalle['precioSuelto'];
                 $detalleCompra->producto_id = $producto->id;
                 $detalleCompra->compra_id = $compra->id;
                 $detalleCompra->save();
 
-                $totalCompra += $detalle['cantidad'] * $detalleCompra['precio_unitario'];
+                $totalCompra += $detalle['cantidad'] * $detalle['precioSuelto'];
 
                 // Crear o actualizar stock
                 $stockController->store($producto->id, $tienda, $detalle['cantidad']);
@@ -155,11 +155,11 @@ class CompraController extends Controller
                 // Calcular el saldo dependiendo de la operación
                 if ($operacionTipo == 1) {
                     $cantidadSaldo = $detalle['cantidad'];
-                    $vuSaldo = $detalle['precio_unitario'];
-                    $vtSaldo = $detalle['cantidad'] * $detalle['precio_unitario'];
+                    $vuSaldo = $detalle['precioSuelto'];
+                    $vtSaldo = $detalle['cantidad'] * $detalle['precioSuelto'];
                 } else {
                     $cantidadSaldo = $operacion->cantidadSaldo + $detalle['cantidad'];
-                    $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precio_unitario']);
+                    $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precioSuelto']);
                     $vuSaldo = $vtSaldo / $cantidadSaldo;
                 }
 
@@ -168,8 +168,8 @@ class CompraController extends Controller
                 $kardex->fecha = $fecha;
                 $kardex->documento = $factura;
                 $kardex->cantidadEntrada = $detalle['cantidad'];
-                $kardex->vuEntrada = $detalle['precio_unitario'];
-                $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precio_unitario'];
+                $kardex->vuEntrada = $detalle['precioSuelto'];
+                $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precioSuelto'];
                 $kardex->cantidadSalida = 0;
                 $kardex->vuSalida = 0;
                 $kardex->vtSalida = 0;
