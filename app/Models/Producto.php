@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\StockTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-    use HasFactory;
+    use HasFactory, StockTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -56,5 +57,20 @@ class Producto extends Model
     public function marca()
     {
         return $this->belongsTo(Marca::class);
+    }
+
+    public function getStocksPorAlmacenAttribute()
+    {
+        $almacenes = Almacen::all();
+        $stocks = [];
+
+        foreach ($almacenes as $almacen) {
+            $stock = $this->verStock($almacen->id, $this->id);
+            $stocks['almacens'] = [
+                $almacen->nombre => ['stock' => $stock]
+            ];
+        }
+
+        return $stocks;
     }
 }

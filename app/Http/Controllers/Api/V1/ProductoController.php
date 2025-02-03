@@ -12,6 +12,18 @@ class ProductoController extends Controller
 {
     use GuardaImagenTrait;
     use StockTrait;
+
+    public function mostrarProductosXAlmacen()
+    {
+        $productos = Producto::all()->map(function ($producto) {
+            return array_merge($producto->toArray(), $producto->stocks_por_almacen);
+        });
+
+        return response()->json($productos);
+
+
+
+    }
     public function mostrarTodo()
     {
         $productos = Producto::with('familia', 'grupo', 'marca')->get();
@@ -126,3 +138,7 @@ class ProductoController extends Controller
         return response()->json(["message" => "Producto eliminado"], 200);
     }
 }
+
+
+
+
