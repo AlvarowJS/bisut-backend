@@ -6,6 +6,44 @@ use App\Models\Kardex;
 
 trait KardexTrait
 {
+    public function transferirProductoKardex(
+        $productoId,
+        $tiendaId,
+        $fecha,
+        $cantidad,
+        $vu,
+        $tipo
+    ) {
+        //tipo 1 emisior
+        //tipo 2 receptor
+
+        $kardex = new Kardex();
+        $kardex->fecha = $fecha;
+        if ($tipo == 1) {
+            $kardex->cantidadEntrada = 0;
+            $kardex->vuEntrada = 0;
+            $kardex->vtEntrada = 0;
+            $kardex->cantidadSalida = $cantidad;
+            $kardex->vuSalida = $vu;
+            $kardex->vtSalida = $cantidad * $vu;
+        } else {
+            $kardex->cantidadEntrada = $cantidad;
+            $kardex->vuEntrada = $vu;
+            $kardex->vtEntrada = $cantidad * $vu;
+            $kardex->cantidadSalida = 0;
+            $kardex->vuSalida = 0;
+            $kardex->vtSalida = 0;
+        }
+        $kardex->cantidadSaldo = $cantidad + $vu;
+        // $kardex->vuSaldo = $vuSaldo;
+        // $kardex->vtSaldo = $vtSaldo;
+
+        $kardex->producto_id = $productoId;
+        $kardex->operacion_id = 4;
+        $kardex->almacen_id = $tiendaId;
+        $kardex->save();
+        $kardex = new Kardex();
+    }
     public function registrarVenta(
         $productoId,
         $tiendaId,

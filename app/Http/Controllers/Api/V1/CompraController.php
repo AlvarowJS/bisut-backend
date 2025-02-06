@@ -98,7 +98,7 @@ class CompraController extends Controller
                         'precio4' => $detalle['precio4'] ?? null,
                         'minimo' => $detalle['minimo'] ?? null,
                         'maximo' => $detalle['maximo'] ?? null,
-                        'precioSuelto' => $detalle['precioSuelto'] ?? null,
+                        'precioSuelto' => $detalle['precio_suelto'] ?? null,
                         'piezasPaquete' => $detalle['piezasPaquete'] ?? null,
                         'tono' => $detalle['tono'] ?? null,
                         'fiscal' => $detalle['fiscal'] ?? null,
@@ -121,7 +121,7 @@ class CompraController extends Controller
                     $producto->precio4 = $detalle['precio4'] ?? null;
                     $producto->minimo = $detalle['minimo'] ?? null;
                     $producto->maximo = $detalle['maximo'] ?? null;
-                    $producto->precioSuelto = $detalle['precioSuelto'] ?? null;
+                    $producto->precioSuelto = $detalle['precio_suelto'] ?? null;
                     $producto->piezasPaquete = $detalle['piezasPaquete'] ?? null;
                     $producto->tono = $detalle['tono'] ?? null;
                     $producto->fiscal = $detalle['fiscal'] ?? null;
@@ -132,13 +132,13 @@ class CompraController extends Controller
                 $detalleCompra->item = $producto->item;
                 $detalleCompra->descripcion = $producto->descripcion;
                 $detalleCompra->cantidad = $detalle['cantidad'];
-                $detalleCompra->precio_unitario = $detalle['precioSuelto'];
-                $detalleCompra->total = $detalle['cantidad'] * $detalle['precioSuelto'];
+                $detalleCompra->precio_unitario = $detalle['precio_suelto'];
+                $detalleCompra->total = $detalle['cantidad'] * $detalle['precio_suelto'];
                 $detalleCompra->producto_id = $producto->id;
                 $detalleCompra->compra_id = $compra->id;
                 $detalleCompra->save();
 
-                $totalCompra += $detalle['cantidad'] * $detalle['precioSuelto'];
+                $totalCompra += $detalle['cantidad'] * $detalle['precio_suelto'];
 
                 // Crear o actualizar stock
                 $stockController->store($producto->id, $tienda, $detalle['cantidad']);
@@ -155,11 +155,11 @@ class CompraController extends Controller
                 // Calcular el saldo dependiendo de la operación
                 if ($operacionTipo == 1) {
                     $cantidadSaldo = $detalle['cantidad'];
-                    $vuSaldo = $detalle['precioSuelto'];
-                    $vtSaldo = $detalle['cantidad'] * $detalle['precioSuelto'];
+                    $vuSaldo = $detalle['precio_suelto'];
+                    $vtSaldo = $detalle['cantidad'] * $detalle['precio_suelto'];
                 } else {
                     $cantidadSaldo = $operacion->cantidadSaldo + $detalle['cantidad'];
-                    $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precioSuelto']);
+                    $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precio_suelto']);
                     $vuSaldo = $vtSaldo / $cantidadSaldo;
                 }
 
@@ -168,8 +168,8 @@ class CompraController extends Controller
                 $kardex->fecha = $fecha;
                 $kardex->documento = $factura;
                 $kardex->cantidadEntrada = $detalle['cantidad'];
-                $kardex->vuEntrada = $detalle['precioSuelto'];
-                $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precioSuelto'];
+                $kardex->vuEntrada = $detalle['precio_suelto'];
+                $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precio_suelto'];
                 $kardex->cantidadSalida = 0;
                 $kardex->vuSalida = 0;
                 $kardex->vtSalida = 0;

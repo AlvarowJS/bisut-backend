@@ -12,6 +12,9 @@ trait StockTrait
             ->where('producto_id', $productoId)
             ->orderBy('id', 'desc')
             ->first();
+        if(!$stock){
+            return 0;
+        }
         return $stock->cantidadSaldo;
     }
 }

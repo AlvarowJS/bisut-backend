@@ -13,9 +13,26 @@ class ProductoController extends Controller
     use GuardaImagenTrait;
     use StockTrait;
 
-    public function mostrarProductosXAlmacen()
+    public function trasnferenciaProductos(Request $request)
     {
-        $productos = Producto::all()->map(function ($producto) {
+        $almacenEmisor = $request->almacen_emisor;
+        $almacenReceptor = $request->almacen_receptor;
+        foreach($request->productos as $producto){
+            $productoCantidadEmisor = $this->verStock($almacenEmisor, $producto->id);
+            $productoCantidadReceptor = $this->verStock($almacenReceptor, $producto->id);            
+            $productoCantidadNueva = $producto['item'];
+            $cantidadNuevaEmisor = $productoCantidadEmisor - $productoCantidadNueva;
+            $cantidadNuevaReceptor = $productoCantidadReceptor + $productoCantidadNueva;            
+
+        }
+        
+        
+
+    }
+
+    public function mostrarProductosXAlmacen()
+    {        
+        $productos = Producto::with('marca')->get()->map(function ($producto) {
             return array_merge($producto->toArray(), $producto->stocks_por_almacen);
         });
 

@@ -62,13 +62,10 @@ class Producto extends Model
     public function getStocksPorAlmacenAttribute()
     {
         $almacenes = Almacen::all();
-        $stocks = [];
-
+        $stocks = [];        
         foreach ($almacenes as $almacen) {
             $stock = $this->verStock($almacen->id, $this->id);
-            $stocks['almacens'] = [
-                $almacen->nombre => ['stock' => $stock]
-            ];
+            $stocks['almacens'][$almacen->nombre] = ['stock' => $stock];            
         }
 
         return $stocks;
