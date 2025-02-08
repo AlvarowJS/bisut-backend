@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('v1/productos', Producto::class);
     Route::get('v1/all-productos', [Producto::class, 'mostrarTodo']);
     Route::get('v1/listar-productos', [Producto::class, 'mostrarProductosXAlmacen']);
+    Route::post('v1/transferir-productos', [Producto::class, 'trasnferenciaProductos']);
     Route::get('/v1/stock/{tiendaId}/{productoId}', [Producto::class, 'show']);
     Route::apiResource('v1/compras', Compra::class);
     Route::apiResource('v1/ventas', Venta::class);

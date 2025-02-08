@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use App\Traits\GuardaImagenTrait;
+use App\Traits\KardexTrait;
 use App\Traits\StockTrait;
 use Illuminate\Http\Request;
 
@@ -12,18 +13,29 @@ class ProductoController extends Controller
 {
     use GuardaImagenTrait;
     use StockTrait;
+    use KardexTrait;
 
     public function trasnferenciaProductos(Request $request)
     {
         $almacenEmisor = $request->almacen_emisor;
         $almacenReceptor = $request->almacen_receptor;
+        $fecha = $request->fecha;
+        $vu = $request->vu;
         foreach($request->productos as $producto){
             $productoCantidadEmisor = $this->verStock($almacenEmisor, $producto->id);
             $productoCantidadReceptor = $this->verStock($almacenReceptor, $producto->id);            
             $productoCantidadNueva = $producto['item'];
-            $cantidadNuevaEmisor = $productoCantidadEmisor - $productoCantidadNueva;
-            $cantidadNuevaReceptor = $productoCantidadReceptor + $productoCantidadNueva;            
-
+            $this->transferirProductoKardex($producto['id'], 
+            $almacenEmisor, 
+            $fecha, 
+            $productoCantidadNueva,
+            $vu, 1);
+            $this->transferirProductoKardex($producto['id'], 
+            $almacenReceptor, 
+            $fecha, 
+            $productoCantidadNueva,
+            $vu, 2);
+            
         }
         
         

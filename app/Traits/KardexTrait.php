@@ -10,39 +10,56 @@ trait KardexTrait
         $productoId,
         $tiendaId,
         $fecha,
-        $cantidad,
-        $vu,
+        $cantidad,        
         $tipo
     ) {
         //tipo 1 emisior
         //tipo 2 receptor
+        $operacion = Kardex::where('producto_id', $productoId)
+            ->where('almacen_id', $tiendaId)
+            ->latest('id')
+            ->first();
 
         $kardex = new Kardex();
         $kardex->fecha = $fecha;
+        // ventas
         if ($tipo == 1) {
+            // operaciones:
+            $cantidadSaldo = $operacion->cantidadSaldo - $cantidad;
+            $vtSaldo = $operacion->vtSaldo - ($operacion * $operacion->vuSaldo);
+            $vuSaldo = $vtSaldo / $cantidadSaldo;
+            //
             $kardex->cantidadEntrada = 0;
             $kardex->vuEntrada = 0;
             $kardex->vtEntrada = 0;
             $kardex->cantidadSalida = $cantidad;
-            $kardex->vuSalida = $vu;
-            $kardex->vtSalida = $cantidad * $vu;
+            $kardex->vuSalida = $operacion->vuSaldo;
+            $kardex->vtSalida = $cantidad * $operacion->vuSaldo;
+
+            $kardex->cantidadSaldo = $cantidadSaldo;
+            $kardex->vtSaldo = $vtSaldo;
+            $kardex->vuSaldo = $vuSaldo;
         } else {
             $kardex->cantidadEntrada = $cantidad;
-            $kardex->vuEntrada = $vu;
-            $kardex->vtEntrada = $cantidad * $vu;
+            $kardex->vuEntrada = $operacion->vuSaldo;
+            $kardex->vtEntrada = $cantidad * $operacion->vuSaldo;
             $kardex->cantidadSalida = 0;
             $kardex->vuSalida = 0;
             $kardex->vtSalida = 0;
-        }
-        $kardex->cantidadSaldo = $cantidad + $vu;
-        // $kardex->vuSaldo = $vuSaldo;
-        // $kardex->vtSaldo = $vtSaldo;
 
+            // operaciones:
+            $cantidadSaldo = $operacion->cantidadSaldo + $cantidad;
+            $vtSaldo = $operacion->vtSaldo + ($cantidad * $operacion->vuSaldo);
+            $vuSaldo = $vtSaldo / $cantidadSaldo;
+            //
+            $kardex->cantidadSaldo = $cantidadSaldo;
+            $kardex->vuSaldo = $vuSaldo;
+            $kardex->vtSaldo = $vtSaldo;
+        }
         $kardex->producto_id = $productoId;
         $kardex->operacion_id = 4;
         $kardex->almacen_id = $tiendaId;
         $kardex->save();
-        $kardex = new Kardex();
     }
     public function registrarVenta(
         $productoId,
