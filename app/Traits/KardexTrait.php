@@ -3,6 +3,9 @@
 namespace App\Traits;
 
 use App\Models\Kardex;
+use Exception;
+
+use function Laravel\Prompts\error;
 
 trait KardexTrait
 {
@@ -16,6 +19,9 @@ trait KardexTrait
         $vtSaldoAnterior
     ) {
         $cantidadSaldo = $cantidadSaldoAnterior - $cantidad;
+        if($cantidadSaldo < 0){
+            throw new Exception("No hay suficiente stock en el almacén $tiendaId para el producto ID: $productoId.");
+        }
         $vtSaldo = $vtSaldoAnterior - ($cantidad * $vuSaldoAnterior);
         $vuSaldo = $vtSaldo / $cantidadSaldo;
         
@@ -52,17 +58,15 @@ trait KardexTrait
             ->first();
 
         $operacionTipo = $operacion ? 2 : 1;
-
         if ($operacionTipo == 1) {
             $cantidadSaldo = $cantidad;
             $vuSaldo = $vuSaldoAnterior;
-            $vtSaldo = $cantidad + $vuSaldoAnterior;
+            $vtSaldo = $cantidad * $vuSaldoAnterior;
         } else {
-            $cantidadSaldo = $operacion->cantidad + $cantidad;
+            $cantidadSaldo = $operacion->cantidadSaldo + $cantidad;            
             $vtSaldo = $operacion->vtSaldo + ($cantidad * $operacion->vuSaldo);
             $vuSaldo = $vtSaldo / $cantidadSaldo;
-        }
-        echo($operacion ? $operacion->vuSaldo : $vuSaldoAnterior);
+        }        
         $kardex = new Kardex();
         $kardex->fecha = $fecha;
         $kardex->cantidadEntrada = $cantidad;
@@ -90,24 +94,30 @@ trait KardexTrait
             ->where('almacen_id', $tiendaIdEmisor)
             ->latest('id')
             ->first();
-        $this->registrarSalidaTrasnferencia(
-            $fecha,
-            $cantidad,
-            $tiendaIdEmisor,
-            $productoId,
-            $operacion->cantidadSaldo,
-            $operacion->vuSaldo,
-            $operacion->vtSaldo
-        );
-        $this->registrarEntradaTransferencia(
-            $fecha,
-            $cantidad,
-            $tiendaIdReceptor,
-            $productoId,
-            $operacion->cantidadSaldo,
-            $operacion->vuSaldo,
-            $operacion->vtSaldo
-        );
+
+        try {
+            $this->registrarSalidaTrasnferencia(
+                $fecha,
+                $cantidad,
+                $tiendaIdEmisor,
+                $productoId,
+                $operacion->cantidadSaldo,
+                $operacion->vuSaldo,
+                $operacion->vtSaldo
+            );
+            $this->registrarEntradaTransferencia(
+                $fecha,
+                $cantidad,
+                $tiendaIdReceptor,
+                $productoId,
+                $operacion->cantidadSaldo,
+                $operacion->vuSaldo,
+                $operacion->vtSaldo
+            );
+        } catch (Exception $e) {
+            throw new Exception("Error en la transferencia de producto: " . $e->getMessage());
+        }
+        
     }
 
     public function registrarVenta(
@@ -175,7 +185,7 @@ trait KardexTrait
         if ($operacionTipo == 1) {
             $cantidadSaldo = $cantidadSaldoActual;
             $vuSaldo = $precioUnitarioActual;
-            $vtSaldo = $cantidadSaldoActual + $precioUnitarioActual;
+            $vtSaldo = $cantidadSaldoActual * $precioUnitarioActual;
         } else {
             $cantidadSaldo = $operacion->cantidadSaldo + $cantidadSaldoActual;
             $vtSaldo = $operacion->vtSaldo + ($cantidadSaldoActual * $precioUnitarioActual);

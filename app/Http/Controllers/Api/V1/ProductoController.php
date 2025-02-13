@@ -7,6 +7,7 @@ use App\Models\Producto;
 use App\Traits\GuardaImagenTrait;
 use App\Traits\KardexTrait;
 use App\Traits\StockTrait;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -17,18 +18,23 @@ class ProductoController extends Controller
 
     public function trasnferenciaProductos(Request $request)
     {
-        $almacenEmisor = $request->almacen_emisor;
-        $almacenReceptor = $request->almacen_receptor;
-        $fecha = $request->fecha;
-        foreach ($request->productos as $producto) {
-            $productoCantidadNueva = $producto['cantidad'];
-            $this->transferirProductoKardex(
-                $producto['producto_id'],
-                $almacenEmisor,
-                $almacenReceptor,
-                $fecha,
-                $productoCantidadNueva,                
-            );         
+        try {
+            $almacenEmisor = $request->almacen_emisor;
+            $almacenReceptor = $request->almacen_receptor;
+            $fecha = $request->fecha;
+            foreach ($request->productos as $producto) {
+                $productoCantidadNueva = $producto['cantidad'];
+                $this->transferirProductoKardex(
+                    $producto['producto_id'],
+                    $almacenEmisor,
+                    $almacenReceptor,
+                    $fecha,
+                    $productoCantidadNueva,
+                );
+            }
+            return response()->json(['message' => 'Transferencia realizada con éxito'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 

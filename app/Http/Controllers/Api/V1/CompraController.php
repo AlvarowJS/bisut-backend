@@ -11,10 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Imports\ComprasImport;
+use App\Traits\KardexTrait;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CompraController extends Controller
 {
+    use KardexTrait;
     public function importarCompras(Request $request)
     {
         // Validar que el archivo y los otros campos estén presentes
@@ -143,44 +145,8 @@ class CompraController extends Controller
                 // Crear o actualizar stock
                 $stockController->store($producto->id, $tienda, $detalle['cantidad']);
                 // Buscar la última operación en el Kardex
-                $operacion = Kardex::where('producto_id', $producto->id)
-                    ->where('almacen_id', $tienda)
-                    ->latest('id')
-                    ->first();
 
-
-                // Definir tipo de operación: 2 = compra anterior, 1 = stock inicial
-                $operacionTipo = $operacion ? 2 : 1;
-
-                // Calcular el saldo dependiendo de la operación
-                if ($operacionTipo == 1) {
-                    $cantidadSaldo = $detalle['cantidad'];
-                    $vuSaldo = $detalle['precio_suelto'];
-                    $vtSaldo = $detalle['cantidad'] * $detalle['precio_suelto'];
-                } else {
-                    $cantidadSaldo = $operacion->cantidadSaldo + $detalle['cantidad'];
-                    $vtSaldo = $operacion->vtSaldo + ($detalle['cantidad'] * $detalle['precio_suelto']);
-                    $vuSaldo = $vtSaldo / $cantidadSaldo;
-                }
-
-                // Crear el registro en el Kardex
-                $kardex = new Kardex();
-                $kardex->fecha = $fecha;
-                $kardex->documento = $factura;
-                $kardex->cantidadEntrada = $detalle['cantidad'];
-                $kardex->vuEntrada = $detalle['precio_suelto'];
-                $kardex->vtEntrada = $detalle['cantidad'] * $detalle['precio_suelto'];
-                $kardex->cantidadSalida = 0;
-                $kardex->vuSalida = 0;
-                $kardex->vtSalida = 0;
-                $kardex->cantidadSaldo = $cantidadSaldo;
-                $kardex->vuSaldo = $vuSaldo;
-                $kardex->vtSaldo = $vtSaldo;
-                $kardex->producto_id = $producto->id;
-                $kardex->operacion_id = $operacionTipo;
-                $kardex->compra_id = $compra->id;
-                $kardex->almacen_id = $tienda;
-                $kardex->save();
+                $this->registrarCompra($producto->id, $tienda, $compra->id, $fecha, $factura, $detalle['cantidad'],$detalle['precio_suelto']);                
             }
             $compra->total = $totalCompra;
             $compra->save();
