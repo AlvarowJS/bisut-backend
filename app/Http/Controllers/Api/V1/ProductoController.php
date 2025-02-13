@@ -20,38 +20,25 @@ class ProductoController extends Controller
         $almacenEmisor = $request->almacen_emisor;
         $almacenReceptor = $request->almacen_receptor;
         $fecha = $request->fecha;
-        $vu = $request->vu;
-        foreach($request->productos as $producto){
-            $productoCantidadEmisor = $this->verStock($almacenEmisor, $producto->id);
-            $productoCantidadReceptor = $this->verStock($almacenReceptor, $producto->id);            
-            $productoCantidadNueva = $producto['item'];
-            $this->transferirProductoKardex($producto['id'], 
-            $almacenEmisor, 
-            $fecha, 
-            $productoCantidadNueva,
-            $vu, 1);
-            $this->transferirProductoKardex($producto['id'], 
-            $almacenReceptor, 
-            $fecha, 
-            $productoCantidadNueva,
-            $vu, 2);
-            
+        foreach ($request->productos as $producto) {
+            $productoCantidadNueva = $producto['cantidad'];
+            $this->transferirProductoKardex(
+                $producto['producto_id'],
+                $almacenEmisor,
+                $almacenReceptor,
+                $fecha,
+                $productoCantidadNueva,                
+            );         
         }
-        
-        
-
     }
 
     public function mostrarProductosXAlmacen()
-    {        
+    {
         $productos = Producto::with('marca')->get()->map(function ($producto) {
             return array_merge($producto->toArray(), $producto->stocks_por_almacen);
         });
 
         return response()->json($productos);
-
-
-
     }
     public function mostrarTodo()
     {
@@ -63,7 +50,7 @@ class ProductoController extends Controller
         $data = [];
         $tiendaId = request()->input('tiendaId');
         $productos = Producto::with('familia', 'grupo', 'marca')->get();
-    
+
         if (!$tiendaId) {
             $data = $productos->map(function ($producto) {
                 $producto->setAttribute('stock', "Seleccione una tienda");
@@ -75,10 +62,10 @@ class ProductoController extends Controller
                 return $producto;
             });
         }
-    
+
         return response()->json($data);
     }
-    
+
 
     public function store(Request $request)
     {
@@ -167,7 +154,3 @@ class ProductoController extends Controller
         return response()->json(["message" => "Producto eliminado"], 200);
     }
 }
-
-
-
-

@@ -6,61 +6,110 @@ use App\Models\Kardex;
 
 trait KardexTrait
 {
-    public function transferirProductoKardex(
-        $productoId,
-        $tiendaId,
+    public function registrarSalidaTrasnferencia(
         $fecha,
-        $cantidad,        
-        $tipo
+        $cantidad,
+        $tiendaId,
+        $productoId,
+        $cantidadSaldoAnterior,
+        $vuSaldoAnterior,
+        $vtSaldoAnterior
     ) {
-        //tipo 1 emisior
-        //tipo 2 receptor
-        $operacion = Kardex::where('producto_id', $productoId)
-            ->where('almacen_id', $tiendaId)
-            ->latest('id')
-            ->first();
-
+        $cantidadSaldo = $cantidadSaldoAnterior - $cantidad;
+        $vtSaldo = $vtSaldoAnterior - ($cantidad * $vuSaldoAnterior);
+        $vuSaldo = $vtSaldo / $cantidadSaldo;
+        
         $kardex = new Kardex();
         $kardex->fecha = $fecha;
-        // ventas
-        if ($tipo == 1) {
-            // operaciones:
-            $cantidadSaldo = $operacion->cantidadSaldo - $cantidad;
-            $vtSaldo = $operacion->vtSaldo - ($operacion * $operacion->vuSaldo);
-            $vuSaldo = $vtSaldo / $cantidadSaldo;
-            //
-            $kardex->cantidadEntrada = 0;
-            $kardex->vuEntrada = 0;
-            $kardex->vtEntrada = 0;
-            $kardex->cantidadSalida = $cantidad;
-            $kardex->vuSalida = $operacion->vuSaldo;
-            $kardex->vtSalida = $cantidad * $operacion->vuSaldo;
+        //
+        $kardex->cantidadEntrada = 0;
+        $kardex->vuEntrada = 0;
+        $kardex->vtEntrada = 0;
+        $kardex->cantidadSalida = $cantidad;
+        $kardex->vuSalida = $vuSaldoAnterior;
+        $kardex->vtSalida = $cantidad * $vuSaldoAnterior;
 
-            $kardex->cantidadSaldo = $cantidadSaldo;
-            $kardex->vtSaldo = $vtSaldo;
-            $kardex->vuSaldo = $vuSaldo;
-        } else {
-            $kardex->cantidadEntrada = $cantidad;
-            $kardex->vuEntrada = $operacion->vuSaldo;
-            $kardex->vtEntrada = $cantidad * $operacion->vuSaldo;
-            $kardex->cantidadSalida = 0;
-            $kardex->vuSalida = 0;
-            $kardex->vtSalida = 0;
-
-            // operaciones:
-            $cantidadSaldo = $operacion->cantidadSaldo + $cantidad;
-            $vtSaldo = $operacion->vtSaldo + ($cantidad * $operacion->vuSaldo);
-            $vuSaldo = $vtSaldo / $cantidadSaldo;
-            //
-            $kardex->cantidadSaldo = $cantidadSaldo;
-            $kardex->vuSaldo = $vuSaldo;
-            $kardex->vtSaldo = $vtSaldo;
-        }
+        $kardex->cantidadSaldo = $cantidadSaldo;
+        $kardex->vtSaldo = $vtSaldo;
+        $kardex->vuSaldo = $vuSaldo;
         $kardex->producto_id = $productoId;
         $kardex->operacion_id = 4;
         $kardex->almacen_id = $tiendaId;
         $kardex->save();
     }
+    public function registrarEntradaTransferencia(
+        $fecha,
+        $cantidad,
+        $tiendaId,
+        $productoId,
+        $cantidadSaldoAnterior,
+        $vuSaldoAnterior,
+        $vtSaldoAnterior
+    ) {
+        $operacion = Kardex::where('producto_id', $productoId)
+            ->where('almacen_id', $tiendaId)
+            ->latest('id')
+            ->first();
+
+        $operacionTipo = $operacion ? 2 : 1;
+
+        if ($operacionTipo == 1) {
+            $cantidadSaldo = $cantidad;
+            $vuSaldo = $vuSaldoAnterior;
+            $vtSaldo = $cantidad + $vuSaldoAnterior;
+        } else {
+            $cantidadSaldo = $operacion->cantidad + $cantidad;
+            $vtSaldo = $operacion->vtSaldo + ($cantidad * $operacion->vuSaldo);
+            $vuSaldo = $vtSaldo / $cantidadSaldo;
+        }
+        echo($operacion ? $operacion->vuSaldo : $vuSaldoAnterior);
+        $kardex = new Kardex();
+        $kardex->fecha = $fecha;
+        $kardex->cantidadEntrada = $cantidad;
+        $kardex->vuEntrada = $operacion ? $operacion->vuSaldo : $vuSaldoAnterior;
+        $kardex->vtEntrada = $cantidad * ($operacion ? $operacion->vuSaldo : $vuSaldoAnterior);
+        $kardex->cantidadSalida = 0;
+        $kardex->vuSalida = 0;
+        $kardex->vtSalida = 0;
+        $kardex->cantidadSaldo = $cantidadSaldo;
+        $kardex->vuSaldo = $vuSaldo;
+        $kardex->vtSaldo = $vtSaldo;
+        $kardex->producto_id = $productoId;
+        $kardex->operacion_id = 4;
+        $kardex->almacen_id = $tiendaId;
+        $kardex->save();
+    }
+    public function transferirProductoKardex(
+        $productoId,
+        $tiendaIdEmisor,
+        $tiendaIdReceptor,
+        $fecha,
+        $cantidad
+    ) {
+        $operacion = Kardex::where('producto_id', $productoId)
+            ->where('almacen_id', $tiendaIdEmisor)
+            ->latest('id')
+            ->first();
+        $this->registrarSalidaTrasnferencia(
+            $fecha,
+            $cantidad,
+            $tiendaIdEmisor,
+            $productoId,
+            $operacion->cantidadSaldo,
+            $operacion->vuSaldo,
+            $operacion->vtSaldo
+        );
+        $this->registrarEntradaTransferencia(
+            $fecha,
+            $cantidad,
+            $tiendaIdReceptor,
+            $productoId,
+            $operacion->cantidadSaldo,
+            $operacion->vuSaldo,
+            $operacion->vtSaldo
+        );
+    }
+
     public function registrarVenta(
         $productoId,
         $tiendaId,
