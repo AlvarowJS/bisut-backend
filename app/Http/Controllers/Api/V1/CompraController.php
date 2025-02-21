@@ -11,12 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Imports\ComprasImport;
+use App\Traits\DependenciaTrait;
 use App\Traits\KardexTrait;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CompraController extends Controller
 {
     use KardexTrait;
+    use DependenciaTrait;
     public function importarCompras(Request $request)
     {
         // Validar que el archivo y los otros campos estén presentes
@@ -80,55 +82,40 @@ class CompraController extends Controller
 
             // Iterar sobre los detalles de la compra
             $totalCompra = 0;
+            $productoData = [];
             foreach ($request->detalles as $detalle) {
-                $producto = Producto::where('item', $detalle['item'])->first();
-                if ($producto) {
-                    // Actualizar los precios y datos del producto existente
-                    $producto->update([
-                        'item' => $detalle['item'] ?? null,
-                        'descripcion' => $detalle['descripcion'] ?? null,
-                        'cajas' => $detalle['cajas'] ?? null,
-                        'cantidadxCaja' => $detalle['cantidadxCaja'] ?? null,
-                        'cantidad' => $detalle['cantidad'] ?? null,
-                        'familia_id' => $detalle['familia_id'] ?? null,
-                        'grupo_id' => $detalle['grupo_id'] ?? null,
-                        'marca_id' => $detalle['marca_id'] ?? null,
-                        'unidad' => $detalle['unidad'] ?? null,
-                        'precio1' => $detalle['precio1'] ?? null,
-                        'precio2' => $detalle['precio2'] ?? null,
-                        'precio3' => $detalle['precio3'] ?? null,
-                        'precio4' => $detalle['precio4'] ?? null,
-                        'minimo' => $detalle['minimo'] ?? null,
-                        'maximo' => $detalle['maximo'] ?? null,
-                        'precioSuelto' => $detalle['precio_suelto'] ?? null,
-                        'piezasPaquete' => $detalle['piezasPaquete'] ?? null,
-                        'tono' => $detalle['tono'] ?? null,
-                        'fiscal' => $detalle['fiscal'] ?? null,
-                    ]);
-                } else {
-                    // Crear un nuevo producto
+                $producto = Producto::with('familia', 'grupo', 'marca')->where('item', $detalle['item'])->first();
+
+                $familia_id = $this->familia($detalle['familia']);
+                $grupo_id = $this->grupo($detalle['grupo']);
+                $marca_id = $this->marca($detalle['marca']);
+
+                if (!$producto) {
                     $producto = new Producto();
-                    $producto->item = $detalle['item'] ?? null;
-                    $producto->descripcion = $detalle['descripcion'] ?? null;
-                    $producto->cajas = $detalle['cajas'] ?? null;
-                    $producto->cantidadxCaja = $detalle['cantidadxCaja'] ?? null;
-                    $producto->cantidad = $detalle['cantidad'] ?? null;
-                    $producto->familia_id = $detalle['familia_id'] ?? null;
-                    $producto->grupo_id = $detalle['grupo_id'] ?? null;
-                    $producto->marca_id = $detalle['marca_id'] ?? null;
-                    $producto->unidad = $detalle['unidad'] ?? null;
-                    $producto->precio1 = $detalle['precio1'] ?? null;
-                    $producto->precio2 = $detalle['precio2'] ?? null;
-                    $producto->precio3 = $detalle['precio3'] ?? null;
-                    $producto->precio4 = $detalle['precio4'] ?? null;
-                    $producto->minimo = $detalle['minimo'] ?? null;
-                    $producto->maximo = $detalle['maximo'] ?? null;
-                    $producto->precioSuelto = $detalle['precio_suelto'] ?? null;
-                    $producto->piezasPaquete = $detalle['piezasPaquete'] ?? null;
-                    $producto->tono = $detalle['tono'] ?? null;
-                    $producto->fiscal = $detalle['fiscal'] ?? null;
-                    $producto->save();
                 }
+
+                // Actualizar los precios y datos del producto existente
+                $producto->item = $detalle['item'] ?? null;
+                $producto->descripcion = $detalle['descripcion'] ?? null;
+                $producto->cajas = $detalle['cajas'] ?? null;
+                $producto->cantidadxCaja = $detalle['cantidadxCaja'] ?? null;
+                $producto->cantidad = $detalle['cantidad'] ?? null;
+                $producto->familia_id = $familia_id;
+                $producto->grupo_id = $grupo_id;
+                $producto->marca_id = $marca_id;
+                $producto->unidad = $detalle['unidad'] ?? null;
+                $producto->precio1 = $detalle['precio1'] ?? null;
+                $producto->precio2 = $detalle['precio2'] ?? null;
+                $producto->precio3 = $detalle['precio3'] ?? null;
+                $producto->precio4 = $detalle['precio4'] ?? null;
+                $producto->minimo = $detalle['minimo'] ?? null;
+                $producto->maximo = $detalle['maximo'] ?? null;
+                $producto->precioSuelto = $detalle['precio_suelto'] ?? null;
+                $producto->piezasPaquete = $detalle['piezasPaquete'] ?? null;
+                $producto->tono = $detalle['tono'] ?? null;
+                $producto->fiscal = $detalle['fiscal'] ?? null;
+                $producto->save();
+
                 // Crear el detalle de la compra
                 $detalleCompra = new DetalleCompra();
                 $detalleCompra->item = $producto->item;
@@ -145,21 +132,24 @@ class CompraController extends Controller
                 // Crear o actualizar stock
                 $stockController->store($producto->id, $tienda, $detalle['cantidad']);
                 // Buscar la última operación en el Kardex
-
-                $this->registrarCompra($producto->id, $tienda, $compra->id, $fecha, $factura, $detalle['cantidad'],$detalle['precio_suelto']);                
+                $this->registrarCompra($producto->id, $tienda, $compra->id, $fecha, $factura, $detalle['cantidad'], $detalle['precio_suelto']);
             }
             $compra->total = $totalCompra;
             $compra->save();
-            // Si todo va bien, confirmar la transacción
+
+            // Confirmar la transacción
             DB::commit();
+
+            return response()->json([
+                'compra' => $compra,
+                'productos' => $productoData
+            ], 200);
         } catch (\Exception $e) {
             // Si ocurre algún error, revertir la transacción
             DB::rollBack();
             // Manejar el error, por ejemplo, lanzar una excepción o devolver una respuesta de error
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        return response()->json(['message' => 'Compra registrada con éxito'], 200);
     }
     public function show(string $id)
     {

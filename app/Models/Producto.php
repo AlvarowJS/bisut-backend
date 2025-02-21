@@ -19,12 +19,15 @@ class Producto extends Model
         'item',
         'descripcion',
         'cajas',
+        'familia_id',
+        'grupo_id',
+        'marca_id',
         'cantidad',
         'cantidadxCaja',
         'precio1',
         'precio2',
         'precio3',
-        'precio4', 
+        'precio4',
         'precioSuelto',
         'piezasPaquete',
         'fiscal',
@@ -32,7 +35,8 @@ class Producto extends Model
         'maximo',
         'tono',
         'unidad',
-        'foto'
+        'foto',
+
     ];
 
     /**
@@ -62,10 +66,10 @@ class Producto extends Model
     public function getStocksPorAlmacenAttribute()
     {
         $almacenes = Almacen::all();
-        $stocks = [];        
+        $stocks = [];
         foreach ($almacenes as $almacen) {
             $stock = $this->verStock($almacen->id, $this->id);
-            $stocks['almacens'][$almacen->nombre] = ['stock' => $stock];            
+            $stocks['almacens'][$almacen->nombre] = ['stock' => $stock];
         }
 
         return $stocks;
