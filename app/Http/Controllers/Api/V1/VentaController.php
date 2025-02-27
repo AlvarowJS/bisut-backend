@@ -75,7 +75,7 @@ class VentaController extends Controller
             $venta->user_id = $userCurrent;
             $venta->cliente_id = $request->cliente_id;
             $venta->user_id = $userCurrent;
-            // Registrar identificador 
+            // Registrar identificador
             $valIdentificador = $this->ultimoId($tipoFactura);
             $venta->identificador = $valIdentificador;
 
@@ -111,6 +111,8 @@ class VentaController extends Controller
                 }
             }
             DB::commit();
+            $venta = Venta::with(['almacen', 'cliente', 'detallesVenta', 'user'])->find($venta->id);
+
             return response()->json([
                 'message' => "Venta registrada",
                 'data' => $venta
