@@ -59,14 +59,14 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Ventas x Internet',
         ]);
 
-        
+
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Stock Inicial',
-            'descripcion' => 'Primera vez que se registra',            
+            'descripcion' => 'Primera vez que se registra',
         ]);
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Compras',
-            'descripcion' => 'Cuando ya se registro varias veces',            
+            'descripcion' => 'Cuando ya se registro varias veces',
         ]);
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Ventas',
@@ -75,6 +75,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\Operacion::factory()->create([
             'nombre' => 'Transferencia',
             'descripcion' => 'Cuando se transfiere de una tienda a otra',
+        ]);
+        \App\Models\Operacion::factory()->create([
+            'nombre' => 'Docena a pieza',
+            'descripcion' => 'Cuando se convierte una docena a pieza',
         ]);
 
         // Probablemente se tenga que comentar:
@@ -107,7 +111,7 @@ class DatabaseSeeder extends Seeder
             'estado' => true,
             'user_id' => 1,
         ]);
-        
+
 
         \App\Models\Grupo::factory()->create([
             'nombre' => 'Grupo Prueba',
@@ -132,4 +136,4 @@ class DatabaseSeeder extends Seeder
             'tipo' => 1
         ]);
     }
-}   
+}

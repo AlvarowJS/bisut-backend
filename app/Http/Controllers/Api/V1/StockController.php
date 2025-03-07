@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stock;
+use App\Traits\KardexTrait;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-
-    public function index() {}
-
+    use KardexTrait;
 
     public function store($producto_id, $almacen_id, $cantidad)
     {
@@ -30,7 +29,7 @@ class StockController extends Controller
 
         return response()->json([
             'message' => 'Stock actualizado correctamente'
-        ], 200);    
+        ], 200);
     }
 
     public function storeVenta($producto_id, $almacen_id, $cantidad)
@@ -53,21 +52,30 @@ class StockController extends Controller
         }
     }
 
-
-    public function show(string $id)
+    public function docenasAPiezas(Request $request)
     {
-        //
-    }
+        $producto_id_emisor = $request->producto_id_emisor;
+        $producto_id_receptor = $request->producto_id_receptor;
+        $cajas = $request->cajas;
+        $almacen_id = $request->almacen_id;
+        $fecha = $request->fecha;
+
+        $stockEmisor = Stock::where('producto_id', $producto_id_emisor)
+            ->with('producto')
+            ->first();
+
+        $piezasxPaquete = $stockEmisor->producto->piezasPaquete;
+        $cantidadPiezas = $cajas * $piezasxPaquete;
+
+        $this->storeVenta($producto_id_emisor, $almacen_id, $cantidadPiezas);
+        $this->store($producto_id_receptor, $almacen_id, $cantidadPiezas);
+
+        $this->conversionDocenasAPiezasEmisor($producto_id_emisor,  $cajas, $almacen_id, $fecha);
+        $this->conversionDocenasAPiezasReceptor($producto_id_receptor,  $cantidadPiezas, $almacen_id, $fecha);
 
 
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'message' => 'Operacion realizada correctamente'
+        ], 200);
     }
 }

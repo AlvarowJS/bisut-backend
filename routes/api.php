@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\ProductoController as Producto;
 use App\Http\Controllers\Api\V1\CompraController as Compra;
 use App\Http\Controllers\Api\V1\KardexController as Kardex;
 use App\Http\Controllers\Api\V1\VentaController as Venta;
+use App\Http\Controllers\Api\V1\StockController as Stock;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,9 +48,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('v1/listar-productos', [Producto::class, 'mostrarProductosXAlmacen']);
     Route::post('v1/transferir-productos', [Producto::class, 'trasnferenciaProductos']);
     Route::get('/v1/stock/{tiendaId}/{productoId}', [Producto::class, 'show']);
+    // Compras
     Route::apiResource('v1/compras', Compra::class);
+    Route::post('v1/compra-manual', [Compra::class, 'storeManual']);
+
     Route::apiResource('v1/ventas', Venta::class);
     Route::apiResource('v1/kardex', Kardex::class);
     Route::post('v1/producto-foto', [Producto::class, 'updateFoto']);
     Route::post('v1/importar-compra', [Compra::class, 'importarCompras']);
+
+    // Docena a pieza
+    Route::post('v1/docena-piezas', [Stock::class, 'docenasAPiezas']);
+
+
 });

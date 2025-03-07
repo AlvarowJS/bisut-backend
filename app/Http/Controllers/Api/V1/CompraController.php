@@ -58,7 +58,62 @@ class CompraController extends Controller
         $data = Compra::with('proveedor', 'almacen')->get();
         return response()->json($data);
     }
+    public function storeManual(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $tienda = $request->almacen_id;
+            $proveedor = $request->proveedor_id;
+            $fecha = $request->fecha;
+            $factura = $request->factura;
+            $compra = new Compra();
+            $compra->factura = $factura;
+            $compra->fecha = $fecha;
+            $compra->total = 0;
+            $compra->almacen_id = $tienda;
+            $compra->proveedor_id = $proveedor;
+            $compra->save();
 
+            $stockController = new StockController();
+            $totalCompra = 0;
+            foreach ($request->detalles as $detalle) {
+                $producto = Producto::where('item', $detalle['item'])->first();
+                if (!$producto) {
+                    $producto = new Producto();
+                }
+                // Crear el detalle de la compra
+                $detalleCompra = new DetalleCompra();
+                $detalleCompra->item = $producto->item;
+                $detalleCompra->descripcion = $producto->descripcion;
+                $detalleCompra->cantidad = $detalle['cantidad'];
+                $detalleCompra->precio_unitario = $detalle['precio_suelto'];
+                $detalleCompra->total = $detalle['cantidad'] * $detalle['precio_suelto'];
+                $detalleCompra->producto_id = $producto->id;
+                $detalleCompra->compra_id = $compra->id;
+                $detalleCompra->save();
+
+                $totalCompra += $detalle['cantidad'] * $detalle['precio_suelto'];
+
+                // Crear o actualizar stock
+                $stockController->store($producto->id, $tienda, $detalle['cantidad']);
+                // Buscar la última operación en el Kardex
+                $this->registrarCompra($producto->id, $tienda, $compra->id, $fecha, $factura, $detalle['cantidad'], $detalle['precio_suelto']);
+            }
+            $compra->total = $totalCompra;
+            $compra->save();
+
+            DB::commit();
+            return response()->json([
+                'compra' => $compra
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+
+        }
+
+    }
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -86,9 +141,16 @@ class CompraController extends Controller
             foreach ($request->detalles as $detalle) {
                 $producto = Producto::with('familia', 'grupo', 'marca')->where('item', $detalle['item'])->first();
 
-                $familia_id = $this->familia($detalle['familia']);
-                $grupo_id = $this->grupo($detalle['grupo']);
-                $marca_id = $this->marca($detalle['marca']);
+                if($producto){
+                    $familia_id = $producto->familia_id;
+                    $grupo_id = $producto->grupo_id;
+                    $marca_id = $producto->marca_id;
+                }else {
+                    $familia_id = $this->familia($detalle['familia']);
+                    $grupo_id = $this->grupo($detalle['grupo']);
+                    $marca_id = $this->marca($detalle['marca']);
+                }
+
 
                 if (!$producto) {
                     $producto = new Producto();
