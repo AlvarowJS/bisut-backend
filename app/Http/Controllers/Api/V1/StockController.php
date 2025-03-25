@@ -11,6 +11,14 @@ class StockController extends Controller
 {
     use KardexTrait;
 
+    public function mostrarStockProducto($producto_id, $almacen_id)
+    {
+        $stock = Stock::where('producto_id', $producto_id)
+            ->where('almacen_id', $almacen_id)
+            ->first();
+
+        return $stock;
+    }
     public function store($producto_id, $almacen_id, $cantidad)
     {
         $stock = Stock::where('producto_id', $producto_id)
@@ -63,7 +71,7 @@ class StockController extends Controller
         $stockEmisor = Stock::where('producto_id', $producto_id_emisor)
             ->with('producto')
             ->first();
-
+        
         $piezasxPaquete = $stockEmisor->producto->piezasPaquete;
         $cantidadPiezas = $cajas * $piezasxPaquete;
 

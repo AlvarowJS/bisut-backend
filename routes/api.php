@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('v1/all-productos', [Producto::class, 'mostrarTodo']);
     Route::get('v1/listar-productos', [Producto::class, 'mostrarProductosXAlmacen']);
     Route::post('v1/transferir-productos', [Producto::class, 'trasnferenciaProductos']);
-    Route::get('/v1/stock/{tiendaId}/{productoId}', [Producto::class, 'show']);
+    Route::get('/v1/stock/{productoId}', [Producto::class, 'show']);
     // Compras
     Route::apiResource('v1/compras', Compra::class);
     Route::post('v1/compra-manual', [Compra::class, 'storeManual']);
@@ -60,5 +60,5 @@ Route::middleware('auth:sanctum')->group(function () {
     // Docena a pieza
     Route::post('v1/docena-piezas', [Stock::class, 'docenasAPiezas']);
 
-
+    
 });

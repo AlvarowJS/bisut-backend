@@ -102,7 +102,7 @@ class ProductoController extends Controller
 
 
     public function show($id)
-    {
+    {        
         $producto = Producto::find($id);
         if (!$producto) {
             return response()->json(["message" => "not found"], 404);
